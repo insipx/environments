@@ -1,10 +1,10 @@
-{ pkgs ? import <nixpkgs> { }, applePkgs, toolchain, src, cargoLock, ... }:
+{ pkgs ? import <nixpkgs> { }, applePkgs, rustStable, src, cargoLock, ... }:
 
 let isDarwin = pkgs.hostPlatform.isDarwin;
 in {
   default = (pkgs.makeRustPlatform {
-    cargo = toolchain;
-    rustc = toolchain;
+    cargo = rustStable;
+    rustc = rustStable;
   }).buildRustPackage {
     inherit src cargoLock;
     pname = "cast";

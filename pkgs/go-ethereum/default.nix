@@ -1,23 +1,23 @@
-{ pkgs ? import <nixpkgs> { }, ... }:
+{ pkgs, ... }:
 
 let
   # A list of binaries to put into separate outputs
   bins = [ "geth" "clef" ];
-
+  frameworks = pkgs.darwin.apple_sdk.frameworks;
 in pkgs.buildGoModule rec {
   pname = "go-ethereum";
   version = "1.13.2";
 
-  frameworks = pkgs.darwin.apple_sdk.frameworks;
+  go = pkgs.go_1_21;
 
   src = pkgs.fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-tomzF0jM1tcxnnBHLfNWcR1XGECxU8Q/SQAWQBRAFW8=";
+    sha256 = "sha256-iWNt2cCrjf8eaEay8zLu0GmnAhwVbzsYAfWBHuNSiDs=";
   };
 
-  vendorHash = "sha256-VX2S7yjdcconPd8wisV+Cl6FVuEUGU7smIBKfTxpUVY=";
+  vendorHash = "sha256-BKAE4i4nw2b9aoFvM7FFrSHT60G42GQHriuptaIjXLQ=";
 
   doCheck = false;
 
@@ -51,7 +51,5 @@ in pkgs.buildGoModule rec {
     pkgs.darwin.libobjc
     frameworks.IOKit
   ];
-
-  passthru.tests = { inherit (pkgs.nixosTests) geth; };
 
 }

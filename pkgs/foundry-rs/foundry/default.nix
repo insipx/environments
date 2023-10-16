@@ -1,8 +1,7 @@
-{ pkgs ? import <nixpkgs> { }, system, fenix, ... }:
+{ pkgs, rustStable, ... }:
 let
   frameworks = pkgs.darwin.apple_sdk.frameworks;
   applePkgs = [ pkgs.libiconv frameworks.IOKit frameworks.AppKit ];
-  toolchain = fenix.packages.${system}.minimal.toolchain;
   src = pkgs.fetchFromGitHub {
     owner = "foundry-rs";
     repo = "foundry";
@@ -16,15 +15,9 @@ let
     };
   };
 in {
-  anvil = pkgs.callPackage ./anvil {
-    inherit pkgs applePkgs toolchain src cargoLock;
-  };
-  cast =
-    pkgs.callPackage ./cast { inherit pkgs applePkgs toolchain src cargoLock; };
-  chisel = pkgs.callPackage ./chisel {
-    inherit pkgs applePkgs toolchain src cargoLock;
-  };
-  forge = pkgs.callPackage ./forge {
-    inherit pkgs applePkgs toolchain src cargoLock;
-  };
+  anvil = (import ./anvil { inherit pkgs applePkgs rustStable src cargoLock; });
+  cast = (import ./cast { inherit pkgs applePkgs rustStable src cargoLock; });
+  chisel =
+    (import ./chisel { inherit pkgs applePkgs rustStable src cargoLock; });
+  forge = (import ./forge { inherit pkgs applePkgs rustStable src cargoLock; });
 }

@@ -1,12 +1,12 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     systems.url = "github:nix-systems/default";
     devenv.url = "github:cachix/devenv";
-    cargo2nix = {
-      url = "github:cargo2nix/cargo2nix/release-0.11.0";
-      inputs = { nixpkgs.follows = "nixpkgs"; };
-    };
+    #   cargo2nix = {
+    #     url = "github:cargo2nix/cargo2nix/release-0.11.0";
+    #     inputs = { nixpkgs.follows = "nixpkgs"; };
+    #   };
     fenix = {
       url = "github:nix-community/fenix";
       inputs = { nixpkgs.follows = "nixpkgs"; };
@@ -20,31 +20,55 @@
   };
 
   outputs = { self, nixpkgs, devenv, systems, fenix, ... }@inputs:
-    let forEachSystem = nixpkgs.lib.genAttrs (import systems);
+    let
+      go1213Overlay = import ./go/overlay_1_21_3.nix;
+      js18181Overlay = import ./js/overlay_18_18_1.nix;
+      forEachSystem = nixpkgs.lib.genAttrs (import systems);
     in {
       devShells = forEachSystem (system:
         let
-          pkgs = nixpkgs.legacyPackages.${system};
-          foundryPkgs = pkgs.callPackage ./pkgs/foundry-rs/foundry {
-            inherit nixpkgs system fenix;
-          };
-          goEthereumPkg = (import ./pkgs/go-ethereum { inherit nixpkgs; });
+          pkgs =
+            import nixpkgs { overlays = [ go1213Overlay js18181Overlay ]; };
+          # pkgs = nixpkgs.legacyPackages.${system}.extend go1213Overlay;
+          rustStable = fenix.packages.${system}.stable.toolchain;
+          foundryPkgs = (import ./pkgs/foundry-rs/foundry {
+            inherit pkgs system rustStable;
+          });
+          goEthereumPkg = (import ./pkgs/go-ethereum { inherit pkgs; });
+          isDarwin = pkgs.hostPlatform.isDarwin;
+          frameworks = pkgs.darwin.apple_sdk.frameworks;
         in {
           default = devenv.lib.mkShell {
             inherit inputs pkgs;
             modules = [{
               # https://devenv.sh/reference/options/
               packages = [ pkgs.hello ];
-
               enterShell = ''
                 hello
               '';
             }];
           };
-          libxmtp = devenv.lib.mkShell {
+          rustStable = devenv.lib.mkShell {
             inherit inputs pkgs;
             modules = [{
-              packages = [ ];
+              packages = with pkgs;
+                [
+                  pkg-config
+                  clang
+                  gcc
+                  mktemp
+                  jdk21
+                  kotlin
+                  markdownlint-cli
+                  shellcheck
+                  buf
+                ] ++ lib.optionals isDarwin [
+                  libiconv
+                  frameworks.AppKit
+                  frameworks.CoreFoundation
+                  frameworks.Security
+                  frameworks.SystemConfiguration
+                ];
               languages.rust = {
                 enable = true;
                 channel = "stable";
@@ -54,19 +78,24 @@
               '';
             }];
           };
-          foundry = devenv.lib.mkShell {
+          solidityDev = devenv.lib.mkShell {
             inherit inputs pkgs;
             modules = [{
               packages = with foundryPkgs; [
-                anvil.default
+                anvil
                 cast.default
                 chisel.default
                 forge.default
                 goEthereumPkg.geth
+                goEthereumPkg.clef
+                rustStable
+                pkgs.go_1_21
+                pkgs.solc
+                pkgs.nodejs_18
               ];
 
               enterShell = ''
-                hello
+                XMTP Solidity/Foundry Development Environment
               '';
             }];
           };
