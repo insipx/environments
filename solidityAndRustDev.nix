@@ -1,7 +1,14 @@
 { pkgsWithNodejs14, inputs, devenv, fenix, system, ... }:
 let
   pkgs = pkgsWithNodejs14;
-  rust-toolchain = fenix.packages.${system}.stable.toolchain;
+  rust-toolchain = with fenix.packages.${system};
+    combine [
+      minimal.rustc
+      minimal.cargo
+      complete.clippy
+      complete.rustfmt
+      targets.wasm32-unknown-unknown.latest.rust-std
+    ];
   foundryPkgs =
     (import ./pkgs/foundry-rs/foundry { inherit pkgs system rust-toolchain; });
   goEthereumPkg = (import ./pkgs/go-ethereum { inherit pkgs; });
@@ -18,6 +25,7 @@ in devenv.lib.mkShell {
   modules = [{
     packages = with foundryPkgs; [
       rust-toolchain
+      (fenix.packages.${system}.rust-analyzer)
       anvil
       cast.default
       chisel.default
@@ -29,11 +37,13 @@ in devenv.lib.mkShell {
       pkgs.nodejs
       # make sure to use nodePackages! or it will install yarn irrespective of environmental node.
       pkgs.nodePackages.yarn
-      wasm-pack
+      pkgs.wasm-pack
+      pkgs.trunk
+      pkgs.wasm-bindgen-cli
       linters
     ];
     enterShell = ''
-      echo "XMTP Solidity/Foundry Development Environment"
+      echo "XMTP Solidity/Foundry/Rust Development Environment";
     '';
   }];
 }

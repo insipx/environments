@@ -1,4 +1,4 @@
-{ pkgs, rustStable, ... }:
+{ pkgs, rust-toolchain, ... }:
 let
   frameworks = pkgs.darwin.apple_sdk.frameworks;
   applePkgs = [ pkgs.libiconv frameworks.IOKit frameworks.AppKit ];
@@ -15,9 +15,12 @@ let
     };
   };
 in {
-  anvil = (import ./anvil { inherit pkgs applePkgs rustStable src cargoLock; });
-  cast = (import ./cast { inherit pkgs applePkgs rustStable src cargoLock; });
+  anvil =
+    (import ./anvil { inherit pkgs applePkgs rust-toolchain src cargoLock; });
+  cast =
+    (import ./cast { inherit pkgs applePkgs rust-toolchain src cargoLock; });
   chisel =
-    (import ./chisel { inherit pkgs applePkgs rustStable src cargoLock; });
-  forge = (import ./forge { inherit pkgs applePkgs rustStable src cargoLock; });
+    (import ./chisel { inherit pkgs applePkgs rust-toolchain src cargoLock; });
+  forge =
+    (import ./forge { inherit pkgs applePkgs rust-toolchain src cargoLock; });
 }

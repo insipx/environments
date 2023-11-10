@@ -22,28 +22,54 @@
   outputs = { self, nixpkgs, devenv, systems, fenix, ... }@inputs:
     let
       go1213Overlay = import ./go/overlay_1_21_3.nix;
-      js18181Overlay = import ./js/overlay_18_18_1.nix;
+      nodejs_14_21_3 = import ./js/overlay_14_21_3.nix;
+      # js18181Overlay = import ./js/overlay_18_18_1.nix;
       forEachSystem = nixpkgs.lib.genAttrs (import systems);
+      pkgsWithNodejs14 = import nixpkgs {
+        overlays = [ go1213Overlay nodejs_14_21_3 fenix.overlays.default ];
+      };
+      pkgs = import nixpkgs { };
+      pkgsWithRustStable =
+        import nixpkgs { overlays = [ fenix.overlays.default ]; };
     in {
-      devShells = forEachSystem (system:
-        let
-          pkgs =
-            import nixpkgs { overlays = [ go1213Overlay js18181Overlay ]; };
-        in {
-          default = devenv.lib.mkShell {
-            inherit inputs pkgs;
-            modules = [{
-              # https://devenv.sh/reference/options/
-              packages = [ pkgs.hello ];
-              enterShell = ''
-                hello
-              '';
-            }];
-          };
-          libxmtp = (import ./libxmtp.nix { inherit pkgs inputs devenv; });
-          solidityDev = (import ./solidityDev.nix {
-            inherit pkgs inputs devenv fenix system;
-          });
+      devShells = forEachSystem (system: {
+        default = devenv.lib.mkShell {
+          inherit pkgs inputs;
+          modules = [{
+            # https://devenv.sh/reference/options/
+            packages = [ pkgs.hello ];
+            enterShell = ''
+              hello
+            '';
+          }];
+        };
+        libxmtp =
+          (import ./libxmtp.nix { inherit pkgsWithRustStable system fenix; });
+
+        solidityDev = (import ./solidityDev.nix {
+          inherit pkgsWithNodejs14 inputs devenv fenix system;
         });
+
+        luaDev = (import ./lua_dev.nix { inherit pkgs; });
+
+        rustStable = devenv.lib.mkShell {
+          inherit inputs pkgs;
+          modules = [{
+            languages.rust = {
+              enable = true;
+              channel = "stable";
+              components =
+                [ "rustc" "cargo" "clippy" "rustfmt" "rust-analyzer" ];
+            };
+            packages = [ ];
+            enterShell = ''
+              General Rust Dev Environment with latest stable rust in flake.
+            '';
+          }];
+        };
+        solidityAndRust = (import ./solidityAndRustDev.nix {
+          inherit pkgsWithNodejs14 inputs devenv fenix system;
+        });
+      });
     };
 }

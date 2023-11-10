@@ -1,35 +1,52 @@
-{ pkgs, inputs, devenv, ... }:
+{ pkgsWithRustStable, system, fenix, ... }:
 
 let
-  isDarwin = pkgs.hostPlatform.isDarwin;
+  pkgs = pkgsWithRustStable;
+  isDarwin = pkgs.stdenv.isDarwin;
   frameworks = pkgs.darwin.apple_sdk.frameworks;
-in devenv.lib.mkShell {
-  inherit inputs pkgs;
-  modules = [{
-    packages = with pkgs;
-      [
-        pkg-config
-        clang
-        gcc
-        mktemp
-        jdk21
-        kotlin
-        markdownlint-cli
-        shellcheck
-        buf
-      ] ++ lib.optionals isDarwin [
-        libiconv
-        frameworks.AppKit
-        frameworks.CoreFoundation
-        frameworks.Security
-        frameworks.SystemConfiguration
-      ];
-    languages.rust = {
-      enable = true;
-      channel = "stable";
-    };
-    enterShell = ''
-      echo "LibXMTP Rust Environment"
-    '';
-  }];
+  fenixPkgs = fenix.packages.${system};
+  linters = import ./linters.nix { inherit pkgs; };
+  # src = pkgs.fetchFromGitHub {
+  #   owner = "xmtp";
+  #   repo = "libxmtp";
+  #   rev = "main";
+  #   hash = "sha256-KJoOSP4rZ9a1/3xi12gp9ig+LZz2gotxfdNOweZ5ZhM=";
+  # };
+
+  rust-toolchain = with fenixPkgs;
+    combine [
+      stable.rustc
+      stable.cargo
+      complete.clippy
+      stable.rustfmt
+      targets.wasm32-unknown-unknown.latest.rust-std
+    ];
+in pkgs.mkShell {
+  nativeBuildInputs = with pkgs; [ pkg-config ];
+  buildInputs = with pkgs;
+    [
+      # (fenixPkgs.fromToolchainFile { file = ./rust-toolchain.toml; })
+      rust-toolchain
+      rust-analyzer
+      llvmPackages_16.libcxxClang
+      mktemp
+      jdk21
+      kotlin
+      markdownlint-cli
+      shellcheck
+      buf
+      curl
+      wasm-pack
+      diesel-cli
+      twiggy
+      wasm-bindgen-cli
+      binaryen
+      linters
+    ] ++ lib.optionals isDarwin [
+      libiconv
+      frameworks.CoreServices
+      frameworks.Carbon
+      frameworks.ApplicationServices
+      frameworks.AppKit
+    ];
 }
