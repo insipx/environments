@@ -29,6 +29,8 @@
         overlays = [ go1213Overlay nodejs_14_21_3 fenix.overlays.default ];
       };
       pkgs = import nixpkgs { };
+      pkgsWithGo =
+        import nixpkgs { overlays = [ go1213Overlay fenix.overlays.default ]; };
       pkgsWithRustStable =
         import nixpkgs { overlays = [ fenix.overlays.default ]; };
     in {
@@ -68,7 +70,7 @@
           }];
         };
         solidityAndRust = (import ./solidityAndRustDev.nix {
-          inherit pkgsWithNodejs14 inputs devenv fenix system;
+          inherit pkgsWithGo inputs devenv fenix system;
         });
       });
     };

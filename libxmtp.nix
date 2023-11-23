@@ -17,7 +17,7 @@ let
     combine [
       stable.rustc
       stable.cargo
-      complete.clippy
+      stable.clippy
       stable.rustfmt
       targets.wasm32-unknown-unknown.latest.rust-std
     ];
@@ -42,6 +42,8 @@ in pkgs.mkShell {
       wasm-bindgen-cli
       binaryen
       linters
+      protobuf
+      tokio-console
     ] ++ lib.optionals isDarwin [
       libiconv
       frameworks.CoreServices

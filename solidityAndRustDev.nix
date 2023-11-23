@@ -1,6 +1,6 @@
-{ pkgsWithNodejs14, inputs, devenv, fenix, system, ... }:
+{ pkgsWithGo, inputs, devenv, fenix, system, ... }:
 let
-  pkgs = pkgsWithNodejs14;
+  pkgs = pkgsWithGo;
   rust-toolchain = with fenix.packages.${system};
     combine [
       minimal.rustc
@@ -40,6 +40,7 @@ in devenv.lib.mkShell {
       pkgs.wasm-pack
       pkgs.trunk
       pkgs.wasm-bindgen-cli
+      pkgs.protobuf
       linters
     ];
     enterShell = ''
