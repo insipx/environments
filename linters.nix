@@ -12,7 +12,7 @@ pkgs.buildEnv {
     codespell
 
     # Linters
-    cbfmt
+    # cbfmt
     dotenv-linter
     gitlint
     html-tidy
