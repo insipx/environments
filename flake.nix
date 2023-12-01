@@ -45,8 +45,13 @@
             '';
           }];
         };
+
         libxmtp =
           (import ./libxmtp.nix { inherit pkgsWithRustStable system fenix; });
+
+        didethresolver = (import ./didethresolver.nix {
+          inherit pkgsWithRustStable system fenix;
+        });
 
         solidityDev = (import ./solidityDev.nix {
           inherit pkgsWithNodejs14 inputs devenv fenix system;
