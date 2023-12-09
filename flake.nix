@@ -1,4 +1,5 @@
 {
+  inputs = {
     devenv.url = "github:cachix/devenv";
     #   cargo2nix = {
     #     url = "github:cargo2nix/cargo2nix/release-0.11.0";
@@ -41,19 +42,20 @@
             '';
           }];
         };
+
         linters = (import ./linters.nix { inherit pkgs; });
-        
+
         libxmtp = (import ./libxmtp.nix { inherit pkgsWithRust system fenix; });
 
-        didethresolver = (import ./didethresolver.nix {
-          inherit pkgsWithRust system fenix;
-        });
+        didethresolver =
+          (import ./didethresolver.nix { inherit pkgsWithRust system fenix; });
 
         solidityDev = (import ./solidityDev.nix {
           inherit pkgsWithNodejs14 inputs devenv fenix system;
         });
+
         luaDev = (import ./lua_dev.nix { inherit pkgs; });
-        
+
         rustStable = devenv.lib.mkShell {
           inherit inputs pkgs;
           modules = [{
@@ -67,11 +69,11 @@
             '';
           }];
         };
-        
+
         solidityAndRust = (import ./solidityAndRustDev.nix {
           inherit pkgsWithGo inputs devenv fenix system;
         });
-       
+
         xchat = (import ./xchat.nix { inherit pkgsWithRust system fenix; });
       });
     };
