@@ -18,5 +18,6 @@ pkgs.buildEnv {
     html-tidy
     statix
     deadnix
+    markdownlint-cli
   ];
 }
