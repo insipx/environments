@@ -1,7 +1,4 @@
 {
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    systems.url = "github:nix-systems/default";
     devenv.url = "github:cachix/devenv";
     #   cargo2nix = {
     #     url = "github:cargo2nix/cargo2nix/release-0.11.0";
@@ -31,8 +28,7 @@
       pkgs = import nixpkgs { };
       pkgsWithGo =
         import nixpkgs { overlays = [ go1213Overlay fenix.overlays.default ]; };
-      pkgsWithRustStable =
-        import nixpkgs { overlays = [ fenix.overlays.default ]; };
+      pkgsWithRust = import nixpkgs { overlays = [ fenix.overlays.default ]; };
     in {
       devShells = forEachSystem (system: {
         default = devenv.lib.mkShell {
@@ -45,23 +41,18 @@
             '';
           }];
         };
-        libxmtp =
-          (import ./libxmtp.nix { inherit pkgsWithRustStable system fenix; });
-
+        linters = (import ./linters.nix { inherit pkgs; });
+        libxmtp = (import ./libxmtp.nix { inherit pkgsWithRust system fenix; });
         solidityDev = (import ./solidityDev.nix {
           inherit pkgsWithNodejs14 inputs devenv fenix system;
         });
-
         luaDev = (import ./lua_dev.nix { inherit pkgs; });
-
         rustStable = devenv.lib.mkShell {
           inherit inputs pkgs;
           modules = [{
             languages.rust = {
               enable = true;
               channel = "stable";
-              components =
-                [ "rustc" "cargo" "clippy" "rustfmt" "rust-analyzer" ];
             };
             packages = [ ];
             enterShell = ''
@@ -72,6 +63,7 @@
         solidityAndRust = (import ./solidityAndRustDev.nix {
           inherit pkgsWithGo inputs devenv fenix system;
         });
+        xchat = (import ./xchat.nix { inherit pkgsWithRust system fenix; });
       });
     };
 }
