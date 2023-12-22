@@ -1,6 +1,6 @@
-{ pkgsWithRustStable, inputs, system, fenix, ... }:
+{ pkgsWithRust, inputs, system, fenix, ... }:
 let
-  pkgs = pkgsWithRustStable;
+  pkgs = pkgsWithRust;
   isDarwin = pkgs.stdenv.isDarwin;
   frameworks = pkgs.darwin.apple_sdk.frameworks;
   rustStable = (fenix.packages.${system}.stable.withComponents [

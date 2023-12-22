@@ -6,8 +6,6 @@ let
   frameworks = pkgs.darwin.apple_sdk.frameworks;
   fenixPkgs = fenix.packages.${system};
   linters = import ./linters.nix { inherit pkgs; };
-  foundryPkgs =
-    (import ./pkgs/foundry-rs/foundry { inherit pkgs system rust-toolchain; });
   # src = pkgs.fetchFromGitHub {
   #   owner = "xmtp";
   #   repo = "libxmtp";
@@ -17,10 +15,10 @@ let
 
   rust-toolchain = with fenixPkgs;
     combine [
-      stable.rustc
-      stable.cargo
-      stable.clippy
-      stable.rustfmt
+      minimal.rustc
+      minimal.cargo
+      complete.clippy
+      complete.rustfmt
       targets.wasm32-unknown-unknown.latest.rust-std
     ];
 in pkgs.mkShell {
@@ -32,25 +30,16 @@ in pkgs.mkShell {
       rust-analyzer
       llvmPackages_16.libcxxClang
       mktemp
-      jdk21
-      kotlin
       markdownlint-cli
       shellcheck
       buf
       curl
       wasm-pack
-      diesel-cli
       twiggy
       wasm-bindgen-cli
       binaryen
       linters
-      protobuf
-      protoc-gen-prost-crate
       tokio-console
-      protolint
-      cargo-nextest
-      foundryPkgs.anvil
-      go-ethereum
     ] ++ lib.optionals isDarwin [
       libiconv
       frameworks.CoreServices
