@@ -37,6 +37,9 @@ in pkgs.mkShell {
       binaryen
       linters
       tokio-console
+      cargo-nextest
+      foundryPkgs.anvil
+      go-ethereum
     ] ++ lib.optionals isDarwin [
       libiconv
       frameworks.CoreServices

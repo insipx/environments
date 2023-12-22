@@ -49,8 +49,6 @@ in pkgs.mkShell {
       tokio-console
       protolint
       cargo-nextest
-      foundryPkgs.anvil
-      go-ethereum
     ] ++ lib.optionals isDarwin [
       libiconv
       frameworks.CoreServices
