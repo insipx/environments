@@ -5,13 +5,14 @@ let
   src = pkgs.fetchFromGitHub {
     owner = "foundry-rs";
     repo = "foundry";
-    rev = "0232ee56a20324af443e69b0c42db7c0b12031d8";
-    hash = "sha256-dglYAjcjl7Mqab5sfnxpzlRm5JFhbFdoV85u4FOLj7U=";
+    rev = "nightly";
+    hash = "sha256-bAh2dcJpbDEmyw/kwftCgmj3zY7gsSPvz8rb4NHzZ6E=";
   };
   cargoLock = {
     lockFile = "${src}/Cargo.lock";
     outputHashes = {
-      "ethers-2.0.10" = "sha256-bfnTG8ab5mRrqnrm9b5UuqN+PfTQbTcMkcNWI2GpH9s=";
+      "ethers-2.0.11" = "sha256-ySrCZOiqOcDVH5T7gbimK6Bu7A2OCcU64ZL1RfFPrBc=";
+      "revm-3.5.0" = "sha256-odaNHGw7RfJHJInQ/zRQYBev4vsJeyx6pGERgOSD/24=";
     };
   };
 in {

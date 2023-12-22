@@ -9,7 +9,7 @@ pkgs.buildEnv {
     nixfmt
     yamlfmt
     rubyPackages.htmlbeautifier
-    codespell
+    # codespell
 
     # Linters
     # cbfmt
