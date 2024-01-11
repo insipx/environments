@@ -49,6 +49,7 @@ in pkgs.mkShell {
       tokio-console
       protolint
       cargo-nextest
+      foundryPkgs.anvil
     ] ++ lib.optionals isDarwin [
       libiconv
       frameworks.CoreServices
