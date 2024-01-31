@@ -6,31 +6,35 @@ let
   frameworks = pkgs.darwin.apple_sdk.frameworks;
   fenixPkgs = fenix.packages.${system};
   linters = import ./linters.nix { inherit pkgs; };
-  foundryPkgs =
-    (import ./pkgs/foundry-rs/foundry { inherit pkgs system rust-toolchain; });
-  # src = pkgs.fetchFromGitHub {
-  #   owner = "xmtp";
-  #   repo = "libxmtp";
-  #   rev = "main";
-  #   hash = "sha256-KJoOSP4rZ9a1/3xi12gp9ig+LZz2gotxfdNOweZ5ZhM=";
-  # };
+  # foundryPkgs =
+  #  (import ./pkgs/foundry-rs/foundry { inherit pkgs system rust-toolchain; });
+  src = pkgs.fetchFromGitHub {
+    owner = "xmtp";
+    repo = "libxmtp";
+    rev = "main";
+    hash = "sha256-Nt5mJvDQgG9J1pEfQPOxNHB2SW3mJleVAmuDcVWdGa4=";
+  };
+  rust-toolchain =
+    fenixPkgs.fromToolchainFile { file = ./rust-toolchain.toml; };
 
-  rust-toolchain = with fenixPkgs;
-    combine [
-      stable.rustc
-      stable.cargo
-      stable.clippy
-      stable.rustfmt
-      targets.wasm32-unknown-unknown.latest.rust-std
-    ];
+  # fenixPkgs.fromToolchainFile { file = "${src}/rust-toolchain"; };
+  #rust-toolchain = with fenixPkgs;
+  #  combine [
+  #    stable.rustc
+  #    stable.cargo
+  #    stable.clippy
+  #    stable.rustfmt
+  #    stable.llvm-tools-preview
+  #    targets.wasm32-unknown-unknown.latest.rust-std
+  #  ];
 in pkgs.mkShell {
   nativeBuildInputs = with pkgs; [ pkg-config ];
   buildInputs = with pkgs;
     [
-      # (fenixPkgs.fromToolchainFile { file = ./rust-toolchain.toml; })
       rust-toolchain
       rust-analyzer
-      llvmPackages_16.libcxxClang
+      # clang
+      # llvmPackages_16.libcxxClang
       mktemp
       jdk21
       kotlin
@@ -48,13 +52,17 @@ in pkgs.mkShell {
       protoc-gen-prost-crate
       tokio-console
       protolint
-      cargo-nextest
-      foundryPkgs.anvil
+      # cargo-nextest
+      cargo-udeps
+      # foundryPkgs.anvil
+      gource
+      cargo-cache
     ] ++ lib.optionals isDarwin [
       libiconv
       frameworks.CoreServices
       frameworks.Carbon
       frameworks.ApplicationServices
       frameworks.AppKit
+      darwin.cctools
     ];
 }
