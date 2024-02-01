@@ -10,7 +10,7 @@
       inputs = { nixpkgs.follows = "nixpkgs"; };
     };
 
-    flake-utils.url = "github:numtide/flake-utils";
+    flake-utils = { url = "github:numtide/flake-utils"; };
   };
 
   nixConfig = {
@@ -19,23 +19,27 @@
     extra-substituters = "https://devenv.cachix.org";
   };
 
-  outputs = { self, nixpkgs, systems, flake-utils, devenv, fenix, ... }@inputs:
+  outputs = { self, nixpkgs, flake-utils, devenv, fenix, ... }@inputs:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = import nixpkgs { };
+        pkgs = import nixpkgs { inherit system; };
 
         # Overlays
         go1213Overlay = import ./go/overlay_1_21_3.nix;
         nodejs_14_21_3 = import ./js/overlay_14_21_3.nix;
         # js18181Overlay = import ./js/overlay_18_18_1.nix;
         pkgsWithNodejs14 = import nixpkgs {
+          inherit system;
           overlays = [ go1213Overlay nodejs_14_21_3 fenix.overlays.default ];
         };
         pkgsWithGo = import nixpkgs {
+          inherit system;
           overlays = [ go1213Overlay fenix.overlays.default ];
         };
-        pkgsWithRust =
-          import nixpkgs { overlays = [ fenix.overlays.default ]; };
+        pkgsWithRust = import nixpkgs {
+          inherit system;
+          overlays = [ fenix.overlays.default ];
+        };
 
       in {
         devShells = {
