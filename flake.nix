@@ -10,7 +10,7 @@
       inputs = { nixpkgs.follows = "nixpkgs"; };
     };
 
-    flake-utils.url = "github:numtide/flake-utils";
+    flake-utils = { url = "github:numtide/flake-utils"; };
   };
 
   nixConfig = {
@@ -19,21 +19,30 @@
     extra-substituters = "https://devenv.cachix.org";
   };
 
-  outputs = { self, nixpkgs, systems, flake-utils, devenv, fenix, ... }@inputs:
+  outputs = { self, nixpkgs, flake-utils, devenv, fenix, ... }@inputs:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        go1213Overlay = import ./go/overlay_1_21_3.nix;
-        nodejs_14_21_3 = import ./js/overlay_14_21_3.nix;
-        # js18181Overlay = import ./js/overlay_18_18_1.nix;
+        pkgs = import nixpkgs { inherit system; };
+
+        # Overlays
+        overlays = import ./overlays;
         pkgsWithNodejs14 = import nixpkgs {
-          overlays = [ go1213Overlay nodejs_14_21_3 fenix.overlays.default ];
+          inherit system;
+          overlays = with overlays; [
+            go_1_21_3
+            nodejs_14_21_3
+            fenix.overlays.default
+          ];
         };
-        pkgs = import nixpkgs { };
         pkgsWithGo = import nixpkgs {
-          overlays = [ go1213Overlay fenix.overlays.default ];
+          inherit system;
+          overlays = with overlays; [ go_1_21_3 fenix.overlays.default ];
         };
-        pkgsWithRust =
-          import nixpkgs { overlays = [ fenix.overlays.default ]; };
+        pkgsWithRust = import nixpkgs {
+          inherit system;
+          overlays = [ fenix.overlays.default ];
+        };
+
       in {
         devShells = {
           default = devenv.lib.mkShell {
@@ -47,20 +56,20 @@
             }];
           };
 
-          linters = (import ./linters.nix { inherit pkgs; });
-
           libxmtp =
-            (import ./libxmtp.nix { inherit pkgsWithRust system fenix; });
+            (import ./envs/libxmtp.nix { inherit pkgsWithRust system fenix; });
 
-          didethresolver = (import ./didethresolver.nix {
+          didethresolver = (import ./envs/didethresolver.nix {
             inherit pkgsWithRust system fenix;
           });
 
-          solidityDev = (import ./solidityDev.nix {
+          xps = (import ./envs/xps.nix { inherit pkgsWithRust system fenix; });
+
+          solidityDev = (import ./envs/solidityDev.nix {
             inherit pkgsWithNodejs14 inputs devenv fenix system;
           });
 
-          luaDev = (import ./lua_dev.nix { inherit pkgs; });
+          luaDev = (import ./envs/lua_dev.nix { inherit pkgs; });
 
           rustStable = devenv.lib.mkShell {
             inherit inputs pkgs;
@@ -76,11 +85,12 @@
             }];
           };
 
-          solidityAndRust = (import ./solidityAndRustDev.nix {
+          solidityAndRust = (import ./envs/solidityAndRustDev.nix {
             inherit pkgsWithGo inputs devenv fenix system;
           });
 
-          xchat = (import ./xchat.nix { inherit pkgsWithRust system fenix; });
+          xchat =
+            (import ./envs/xchat.nix { inherit pkgsWithRust system fenix; });
         };
       });
 }

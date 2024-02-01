@@ -1,18 +1,13 @@
-{ pkgsWithRustStable, system, fenix, ... }:
+{ pkgsWithRust, system, fenix, ... }:
 
 let
-  pkgs = pkgsWithRustStable;
+  pkgs = pkgsWithRust;
   isDarwin = pkgs.stdenv.isDarwin;
   frameworks = pkgs.darwin.apple_sdk.frameworks;
   fenixPkgs = fenix.packages.${system};
-  linters = import ./linters.nix { inherit pkgs; };
-  # src = pkgs.fetchFromGitHub {
-  #   owner = "xmtp";
-  #   repo = "libxmtp";
-  #   rev = "main";
-  #   hash = "sha256-KJoOSP4rZ9a1/3xi12gp9ig+LZz2gotxfdNOweZ5ZhM=";
-  # };
-
+  linters = import ./../linters.nix { inherit pkgs; };
+  foundryPkgs =
+    import ./../pkgs/foundry-rs/foundry { inherit pkgs rust-toolchain; };
   rust-toolchain = with fenixPkgs;
     combine [
       stable.rustc
@@ -25,25 +20,16 @@ in pkgs.mkShell {
   nativeBuildInputs = with pkgs; [ pkg-config ];
   buildInputs = with pkgs;
     [
-      # (fenixPkgs.fromToolchainFile { file = ./rust-toolchain.toml; })
       rust-toolchain
       rust-analyzer
       llvmPackages_16.libcxxClang
       mktemp
-      jdk21
-      kotlin
-      markdownlint-cli
-      shellcheck
       buf
       curl
-      wasm-pack
-      diesel-cli
-      twiggy
-      wasm-bindgen-cli
-      binaryen
       linters
-      protobuf
       tokio-console
+      cargo-nextest
+      foundryPkgs.anvil
     ] ++ lib.optionals isDarwin [
       libiconv
       frameworks.CoreServices

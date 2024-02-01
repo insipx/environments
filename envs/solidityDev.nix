@@ -2,10 +2,11 @@
 let
   pkgs = pkgsWithNodejs14;
   rust-toolchain = fenix.packages.${system}.stable.toolchain;
-  foundryPkgs =
-    (import ./pkgs/foundry-rs/foundry { inherit pkgs system rust-toolchain; });
-  goEthereumPkg = (import ./pkgs/go-ethereum { inherit pkgs; });
-  linters = import ./linters.nix { inherit pkgs; };
+  foundryPkgs = (import ./../pkgs/foundry-rs/foundry {
+    inherit pkgs system rust-toolchain;
+  });
+  goEthereumPkg = (import ./../pkgs/go-ethereum { inherit pkgs; });
+  linters = import ./../linters.nix { inherit pkgs; };
   #pinnedNpm = pkgs.nodePackages.npm.overrideAttrs (oldAttrs: {
   #  version = "7.24.2";
   #  src = pkgs.fetchurl {

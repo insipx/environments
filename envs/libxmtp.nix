@@ -6,16 +6,14 @@ let
   frameworks = pkgs.darwin.apple_sdk.frameworks;
   fenixPkgs = fenix.packages.${system};
   linters = import ./linters.nix { inherit pkgs; };
-  # foundryPkgs =
-  #  (import ./pkgs/foundry-rs/foundry { inherit pkgs system rust-toolchain; });
-  src = pkgs.fetchFromGitHub {
-    owner = "xmtp";
-    repo = "libxmtp";
-    rev = "main";
-    hash = "sha256-Nt5mJvDQgG9J1pEfQPOxNHB2SW3mJleVAmuDcVWdGa4=";
-  };
+  # src = pkgs.fetchFromGitHub {
+  #   owner = "xmtp";
+  #   repo = "libxmtp";
+  #   rev = "main";
+  #   hash = "sha256-Nt5mJvDQgG9J1pEfQPOxNHB2SW3mJleVAmuDcVWdGa4=";
+  # };
   rust-toolchain =
-    fenixPkgs.fromToolchainFile { file = ./rust-toolchain.toml; };
+    fenixPkgs.fromToolchainFile { file = ./../rust-toolchain.toml; };
 
   # fenixPkgs.fromToolchainFile { file = "${src}/rust-toolchain"; };
   #rust-toolchain = with fenixPkgs;
@@ -33,12 +31,10 @@ in pkgs.mkShell {
     [
       rust-toolchain
       rust-analyzer
-      # clang
       # llvmPackages_16.libcxxClang
       mktemp
       jdk21
       kotlin
-      markdownlint-cli
       shellcheck
       buf
       curl
@@ -51,10 +47,10 @@ in pkgs.mkShell {
       protobuf
       protoc-gen-prost-crate
       tokio-console
+      cargo-cache
       protolint
-      # cargo-nextest
+      cargo-nextest
       cargo-udeps
-      # foundryPkgs.anvil
       gource
       cargo-cache
     ] ++ lib.optionals isDarwin [
