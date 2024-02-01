@@ -6,6 +6,8 @@ let
   frameworks = pkgs.darwin.apple_sdk.frameworks;
   fenixPkgs = fenix.packages.${system};
   linters = import ./linters.nix { inherit pkgs; };
+  foundryPkgs =
+    (import ./pkgs/foundry-rs/foundry { inherit pkgs system rust-toolchain; });
   # src = pkgs.fetchFromGitHub {
   #   owner = "xmtp";
   #   repo = "libxmtp";
@@ -43,8 +45,11 @@ in pkgs.mkShell {
       binaryen
       linters
       protobuf
+      protoc-gen-prost-crate
       tokio-console
       cargo-cache
+      protolint
+      cargo-nextest
     ] ++ lib.optionals isDarwin [
       libiconv
       frameworks.CoreServices
