@@ -22,18 +22,21 @@
   outputs = { self, nixpkgs, systems, flake-utils, devenv, fenix, ... }@inputs:
     flake-utils.lib.eachDefaultSystem (system:
       let
+        pkgs = import nixpkgs { };
+
+        # Overlays
         go1213Overlay = import ./go/overlay_1_21_3.nix;
         nodejs_14_21_3 = import ./js/overlay_14_21_3.nix;
         # js18181Overlay = import ./js/overlay_18_18_1.nix;
         pkgsWithNodejs14 = import nixpkgs {
           overlays = [ go1213Overlay nodejs_14_21_3 fenix.overlays.default ];
         };
-        pkgs = import nixpkgs { };
         pkgsWithGo = import nixpkgs {
           overlays = [ go1213Overlay fenix.overlays.default ];
         };
         pkgsWithRust =
           import nixpkgs { overlays = [ fenix.overlays.default ]; };
+
       in {
         devShells = {
           default = devenv.lib.mkShell {

@@ -12,7 +12,6 @@ let
   #   rev = "main";
   #   hash = "sha256-KJoOSP4rZ9a1/3xi12gp9ig+LZz2gotxfdNOweZ5ZhM=";
   # };
-
   rust-toolchain = with fenixPkgs;
     combine [
       stable.rustc
@@ -20,6 +19,7 @@ let
       stable.clippy
       stable.rustfmt
       targets.wasm32-unknown-unknown.latest.rust-std
+      targets.x86_64-unknown-linux-gnu.latest.rust-std
     ];
 in pkgs.mkShell {
   nativeBuildInputs = with pkgs; [ pkg-config ];
@@ -28,7 +28,7 @@ in pkgs.mkShell {
       # (fenixPkgs.fromToolchainFile { file = ./rust-toolchain.toml; })
       rust-toolchain
       rust-analyzer
-      llvmPackages_16.libcxxClang
+      # llvmPackages_16.libcxxClang
       mktemp
       jdk21
       kotlin
@@ -44,6 +44,7 @@ in pkgs.mkShell {
       linters
       protobuf
       tokio-console
+      cargo-cache
     ] ++ lib.optionals isDarwin [
       libiconv
       frameworks.CoreServices
