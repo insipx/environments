@@ -25,25 +25,10 @@
         pkgs = import nixpkgs { inherit system; };
 
         # Overlays
-        overlays = import ./overlays;
-        pkgsWithNodejs14 = import nixpkgs {
-          inherit system;
-          overlays = with overlays; [
-            go_1_21_3
-            nodejs_14_21_3
-            fenix.overlays.default
-          ];
-        };
-        pkgsWithGo = import nixpkgs {
-          inherit system;
-          overlays = with overlays; [ go_1_21_3 fenix.overlays.default ];
-        };
-        pkgsWithRust = import nixpkgs {
-          inherit system;
-          overlays = [ fenix.overlays.default ];
-        };
+        pkgBundles =
+          (import ./pkg_bundles.nix { inherit nixpkgs fenix system; });
 
-      in {
+      in with pkgBundles; {
         devShells = {
           default = devenv.lib.mkShell {
             inherit pkgs inputs;
@@ -57,16 +42,16 @@
           };
 
           libxmtp =
-            (import ./envs/libxmtp.nix { inherit pkgsWithRust system fenix; });
+            (import ./envs/libxmtp.nix { inherit withRust system fenix; });
 
           didethresolver = (import ./envs/didethresolver.nix {
-            inherit pkgsWithRust system fenix;
+            inherit withRust system fenix;
           });
 
-          xps = (import ./envs/xps.nix { inherit pkgsWithRust system fenix; });
+          xps = (import ./envs/xps.nix { inherit withRust system fenix; });
 
           solidityDev = (import ./envs/solidityDev.nix {
-            inherit pkgsWithNodejs14 inputs devenv fenix system;
+            inherit withNodejs14 inputs devenv fenix system;
           });
 
           luaDev = (import ./envs/lua_dev.nix { inherit pkgs; });
@@ -86,11 +71,10 @@
           };
 
           solidityAndRust = (import ./envs/solidityAndRustDev.nix {
-            inherit pkgsWithGo inputs devenv fenix system;
+            inherit withGo inputs devenv fenix system;
           });
 
-          xchat =
-            (import ./envs/xchat.nix { inherit pkgsWithRust system fenix; });
+          xchat = (import ./envs/xchat.nix { inherit withRust system fenix; });
         };
       });
 }
