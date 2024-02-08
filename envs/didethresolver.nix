@@ -14,6 +14,7 @@ let
       stable.cargo
       stable.clippy
       stable.rustfmt
+      stable.llvm-tools-preview
       targets.wasm32-unknown-unknown.latest.rust-std
     ];
 in pkgs.mkShell {

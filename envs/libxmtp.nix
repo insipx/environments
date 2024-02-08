@@ -5,15 +5,18 @@ let
   isDarwin = pkgs.stdenv.isDarwin;
   frameworks = pkgs.darwin.apple_sdk.frameworks;
   fenixPkgs = fenix.packages.${system};
-  linters = import ./linters.nix { inherit pkgs; };
+  linters = import ./../linters.nix { inherit pkgs; };
   # src = pkgs.fetchFromGitHub {
   #   owner = "xmtp";
   #   repo = "libxmtp";
   #   rev = "main";
   #   hash = "sha256-Nt5mJvDQgG9J1pEfQPOxNHB2SW3mJleVAmuDcVWdGa4=";
   # };
-  rust-toolchain =
-    fenixPkgs.fromToolchainFile { file = ./../rust-toolchain.toml; };
+  rust-toolchain = fenixPkgs.fromToolchainFile {
+    file = ./../rust-toolchain.toml;
+    sha256 = "sha256-SXRtAuO4IqNOQq+nLbrsDFbVk+3aVA8NNpSZsKlVH/8=";
+
+  };
 
   # fenixPkgs.fromToolchainFile { file = "${src}/rust-toolchain"; };
   #rust-toolchain = with fenixPkgs;
