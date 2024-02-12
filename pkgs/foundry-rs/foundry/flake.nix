@@ -22,7 +22,7 @@
             complete.rustfmt
             targets.wasm32-unknown-unknown.latest.rust-std
           ];
-        buildInputs = [ foundry.anvil ];
+        buildInputs = [ foundry.anvil foundry.cast ];
         foundry = (import ./default.nix { inherit pkgs rust-toolchain; });
       in with pkgs; { devShells.default = mkShell { inherit buildInputs; }; });
 }

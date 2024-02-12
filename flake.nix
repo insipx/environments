@@ -10,6 +10,14 @@
       inputs = { nixpkgs.follows = "nixpkgs"; };
     };
 
+    solc = {
+      url = "github:hellwolf/solc.nix";
+      inputs = {
+        flake-utils.follows = "flake-utils";
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+
     flake-utils = { url = "github:numtide/flake-utils"; };
   };
 
@@ -19,14 +27,14 @@
     extra-substituters = "https://devenv.cachix.org";
   };
 
-  outputs = { self, nixpkgs, flake-utils, devenv, fenix, ... }@inputs:
+  outputs = { self, nixpkgs, flake-utils, devenv, fenix, solc, ... }@inputs:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
 
         # Overlays
         pkgBundles =
-          (import ./pkg_bundles.nix { inherit nixpkgs fenix system; });
+          (import ./pkg_bundles.nix { inherit nixpkgs fenix solc system; });
 
       in with pkgBundles; {
         devShells = {
@@ -51,7 +59,7 @@
           xps = (import ./envs/xps.nix { inherit withRust system fenix; });
 
           solidityDev = (import ./envs/solidityDev.nix {
-            inherit withNodejs14 fenix system;
+            inherit withNodejs14 fenix solc system;
           });
 
           luaDev = (import ./envs/lua_dev.nix { inherit pkgs; });
