@@ -51,7 +51,7 @@
           xps = (import ./envs/xps.nix { inherit withRust system fenix; });
 
           solidityDev = (import ./envs/solidityDev.nix {
-            inherit withNodejs14 inputs devenv fenix system;
+            inherit withNodejs14 fenix system;
           });
 
           luaDev = (import ./envs/lua_dev.nix { inherit pkgs; });

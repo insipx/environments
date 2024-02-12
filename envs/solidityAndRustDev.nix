@@ -1,6 +1,6 @@
-{ pkgsWithGo, inputs, devenv, fenix, system, ... }:
+{ withGo, inputs, devenv, fenix, system, ... }:
 let
-  pkgs = pkgsWithGo;
+  pkgs = withGo;
   rust-toolchain = with fenix.packages.${system};
     combine [
       minimal.rustc
