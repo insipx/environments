@@ -19,5 +19,6 @@ pkgs.buildEnv {
     statix
     deadnix
     markdownlint-cli
+    shellcheck
   ];
 }

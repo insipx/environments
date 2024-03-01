@@ -6,8 +6,6 @@ let
   frameworks = pkgs.darwin.apple_sdk.frameworks;
   fenixPkgs = fenix.packages.${system};
   linters = import ./../linters.nix { inherit pkgs; };
-  foundryPkgs =
-    import ./../pkgs/foundry-rs/foundry { inherit pkgs rust-toolchain; };
   rust-toolchain = with fenixPkgs;
     combine [
       stable.rustc
@@ -24,14 +22,10 @@ in pkgs.mkShell {
       rust-toolchain
       rust-analyzer
       llvmPackages_16.libcxxClang
-      mktemp
-      buf
       curl
       linters
       tokio-console
-      go-ethereum
       cargo-nextest
-      foundryPkgs.anvil
     ] ++ lib.optionals isDarwin [
       libiconv
       frameworks.CoreServices
