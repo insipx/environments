@@ -86,6 +86,9 @@
 
           jsonrpsee =
             (import ./envs/jsonrpsee.nix { inherit withRust system fenix; });
+
+          walletconnect-sign =
+            (import ./envs/walletconnect-sign { inherit pkgs system; });
         };
       });
 }
