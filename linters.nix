@@ -20,5 +20,6 @@ pkgs.buildEnv {
     deadnix
     markdownlint-cli
     shellcheck
+    golangci-lint
   ];
 }

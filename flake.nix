@@ -89,6 +89,8 @@
 
           walletconnect-sign =
             (import ./envs/walletconnect-sign.nix { inherit pkgs system; });
+
+          xmtpd = (import ./envs/xmtpd.nix { inherit pkgs system; });
         };
       });
 }
