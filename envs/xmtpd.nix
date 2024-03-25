@@ -18,6 +18,7 @@ in pkgs.mkShell {
       protolint
       go
       gopls
+      mockgen
     ] ++ lib.optionals isDarwin [
       libiconv
       frameworks.CoreServices
