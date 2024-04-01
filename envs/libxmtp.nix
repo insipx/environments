@@ -6,28 +6,28 @@ let
   frameworks = pkgs.darwin.apple_sdk.frameworks;
   fenixPkgs = fenix.packages.${system};
   linters = import ./../linters.nix { inherit pkgs; };
-  # src = pkgs.fetchFromGitHub {
-  #   owner = "xmtp";
-  #   repo = "libxmtp";
-  #   rev = "main";
-  #   hash = "sha256-Nt5mJvDQgG9J1pEfQPOxNHB2SW3mJleVAmuDcVWdGa4=";
-  # };
-  rust-toolchain = fenixPkgs.fromToolchainFile {
-    file = ./../rust-toolchain.toml;
-    sha256 = "sha256-SXRtAuO4IqNOQq+nLbrsDFbVk+3aVA8NNpSZsKlVH/8=";
-
+  src = pkgs.fetchFromGitHub {
+    owner = "xmtp";
+    repo = "libxmtp";
+    rev = "main";
+    hash = "sha256-0000000000000000000000000000000000000000000=";
   };
 
+  # rust-toolchain = fenixPkgs.fromToolchainFile {
+  #   file = "${src}/rust-toolchain";
+  #   sha256 = "sha256-0000000000000000000000000000000000000000000=";
+  # };
+
   # fenixPkgs.fromToolchainFile { file = "${src}/rust-toolchain"; };
-  #rust-toolchain = with fenixPkgs;
-  #  combine [
-  #    stable.rustc
-  #    stable.cargo
-  #    stable.clippy
-  #    stable.rustfmt
-  #    stable.llvm-tools-preview
-  #    targets.wasm32-unknown-unknown.latest.rust-std
-  #  ];
+  rust-toolchain = with fenixPkgs;
+    combine [
+      minimal.rustc
+      minimal.cargo
+      complete.clippy
+      complete.rustfmt
+      complete.llvm-tools-preview
+      targets.wasm32-unknown-unknown.latest.rust-std
+    ];
 in pkgs.mkShell {
   nativeBuildInputs = with pkgs; [ pkg-config ];
   buildInputs = with pkgs;
