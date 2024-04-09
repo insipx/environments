@@ -6,6 +6,8 @@ let
   frameworks = pkgs.darwin.apple_sdk.frameworks;
   fenixPkgs = fenix.packages.${system};
   linters = import ./../linters.nix { inherit pkgs; };
+  foundryPkgs =
+    import ./../pkgs/foundry-rs/foundry { inherit pkgs rust-toolchain; };
   src = pkgs.fetchFromGitHub {
     owner = "xmtp";
     repo = "libxmtp";
@@ -56,6 +58,7 @@ in pkgs.mkShell {
       cargo-udeps
       gource
       cargo-cache
+      foundryPkgs.anvil
     ] ++ lib.optionals isDarwin [
       libiconv
       frameworks.CoreServices
