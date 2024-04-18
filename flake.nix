@@ -94,6 +94,8 @@
 
           xmtp-node-go =
             (import ./envs/xmtp-node-go.nix { inherit pkgs system; });
+
+          xmtp-proto = (import ./envs/xmtp-proto.nix { inherit pkgs system; });
         };
       });
 }
