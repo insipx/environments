@@ -12,12 +12,12 @@ let
     owner = "xmtp";
     repo = "libxmtp";
     rev = "main";
-    hash = "sha256-iEpEe9RHFJDEmIYWV9AUKVpMvGFORufhuAcEzCneUHQ=";
+    hash = "sha256-5HX2Z0Bu2XL8ryeXBhK72wmsLlHYa6zGvi3+Gavzkaw=";
   };
 
   rust-toolchain = fenixPkgs.fromToolchainFile {
     file = "${src}/rust-toolchain";
-    sha256 = "sha256-7QfkHty6hSrgNM0fspycYkRcB82eEqYa4CoAJ9qA3tU=";
+    sha256 = "sha256-opUgs6ckUQCyDxcB9Wy51pqhd0MPGHUVbwRKKPGiwZU=";
   };
 
   #rust-toolchain = with fenixPkgs;
@@ -58,6 +58,12 @@ in pkgs.mkShell {
       gource
       cargo-cache
       foundryPkgs.anvil
+      gnuplot
+      flamegraph
+
+      # make sure to use nodePackages! or it will install yarn irrespective of environmental node.
+      nodejs
+      nodePackages.yarn
     ] ++ lib.optionals isDarwin [
       libiconv
       frameworks.CoreServices

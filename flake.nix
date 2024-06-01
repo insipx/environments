@@ -78,9 +78,9 @@
             }];
           };
 
-          solidityAndRust = (import ./envs/solidityAndRustDev.nix {
-            inherit withGo inputs devenv fenix system;
-          });
+          #solidityAndRust = (import ./envs/solidityAndRustDev.nix {
+          #  inherit withGo1_20 inputs devenv fenix system;
+          #});
 
           xchat = (import ./envs/xchat.nix { inherit withRust system fenix; });
 
