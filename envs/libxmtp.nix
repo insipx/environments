@@ -12,7 +12,7 @@ let
     owner = "xmtp";
     repo = "libxmtp";
     rev = "main";
-    hash = "sha256-5HX2Z0Bu2XL8ryeXBhK72wmsLlHYa6zGvi3+Gavzkaw=";
+    hash = "sha256-XhZVQEPYS8i/Gk89ax0JIf0pOt88/pGHlej6+phUWQg=";
   };
 
   rust-toolchain = fenixPkgs.fromToolchainFile {
@@ -55,6 +55,7 @@ in pkgs.mkShell {
       protolint
       cargo-nextest
       cargo-udeps
+      cargo-sweep
       gource
       cargo-cache
       foundryPkgs.anvil
