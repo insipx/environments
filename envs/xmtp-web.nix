@@ -12,23 +12,14 @@ let
     owner = "xmtp";
     repo = "libxmtp";
     rev = "main";
-    hash = "sha256-da33gxlEe/hHHqoGYyDy9htYl5WvvcOVHdVFHvyCmfs=";
+    hash = "sha256-XhZVQEPYS8i/Gk89ax0JIf0pOt88/pGHlej6+phUWQg=";
   };
 
   rust-toolchain = fenixPkgs.fromToolchainFile {
     file = "${src}/rust-toolchain";
-    sha256 = "sha256-Ngiz76YP4HTY75GGdH2P+APE/DEIx2R/Dn+BwwOyzZU=";
+    sha256 = "sha256-opUgs6ckUQCyDxcB9Wy51pqhd0MPGHUVbwRKKPGiwZU=";
   };
 
-  #rust-toolchain = with fenixPkgs;
-  #  combine [
-  #    minimal.rustc
-  #    minimal.cargo
-  #    complete.clippy
-  #    complete.rustfmt
-  #    complete.llvm-tools-preview
-  #    targets.wasm32-unknown-unknown.latest.rust-std
-  #  ];
 in pkgs.mkShell {
   nativeBuildInputs = with pkgs; [ pkg-config ];
   buildInputs = with pkgs;
@@ -42,32 +33,15 @@ in pkgs.mkShell {
       shellcheck
       buf
       curl
-      wasm-pack
-      wasm-bindgen-cli
-      diesel-cli
       twiggy
+      wasm-bindgen-cli
       binaryen
       linters
-      protobuf
-      protoc-gen-prost-crate
-      tokio-console
-      cargo-cache
-      protolint
-      cargo-nextest
-      cargo-udeps
-      cargo-sweep
-      gource
-      cargo-cache
-      foundryPkgs.anvil
-      gnuplot
-      flamegraph
       inferno
-      act # GH Actions sim
 
       # make sure to use nodePackages! or it will install yarn irrespective of environmental node.
       nodejs
-      yarn-berry
-      # nodePackages.yarn
+      nodePackages.yarn
     ] ++ lib.optionals isDarwin [
       libiconv
       frameworks.CoreServices

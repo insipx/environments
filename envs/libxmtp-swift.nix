@@ -12,12 +12,12 @@ let
     owner = "xmtp";
     repo = "libxmtp";
     rev = "main";
-    hash = "sha256-da33gxlEe/hHHqoGYyDy9htYl5WvvcOVHdVFHvyCmfs=";
+    hash = "sha256-XhZVQEPYS8i/Gk89ax0JIf0pOt88/pGHlej6+phUWQg=";
   };
 
   rust-toolchain = fenixPkgs.fromToolchainFile {
     file = "${src}/rust-toolchain";
-    sha256 = "sha256-Ngiz76YP4HTY75GGdH2P+APE/DEIx2R/Dn+BwwOyzZU=";
+    sha256 = "sha256-opUgs6ckUQCyDxcB9Wy51pqhd0MPGHUVbwRKKPGiwZU=";
   };
 
   #rust-toolchain = with fenixPkgs;
@@ -43,9 +43,9 @@ in pkgs.mkShell {
       buf
       curl
       wasm-pack
-      wasm-bindgen-cli
       diesel-cli
       twiggy
+      wasm-bindgen-cli
       binaryen
       linters
       protobuf
@@ -66,8 +66,7 @@ in pkgs.mkShell {
 
       # make sure to use nodePackages! or it will install yarn irrespective of environmental node.
       nodejs
-      yarn-berry
-      # nodePackages.yarn
+      nodePackages.yarn
     ] ++ lib.optionals isDarwin [
       libiconv
       frameworks.CoreServices

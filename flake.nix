@@ -52,6 +52,9 @@
           libxmtp =
             (import ./envs/libxmtp.nix { inherit withRust system fenix; });
 
+          xmtp-web =
+            (import ./envs/xmtp-web.nix { inherit withRust system fenix; });
+
           didethresolver = (import ./envs/didethresolver.nix {
             inherit withRust system fenix;
           });
@@ -96,6 +99,7 @@
             (import ./envs/xmtp-node-go.nix { inherit pkgs system; });
 
           xmtp-proto = (import ./envs/xmtp-proto.nix { inherit pkgs system; });
+          wa-sqlite = (import ./envs/wa-sqlite.nix { inherit pkgs system; });
         };
       });
 }
