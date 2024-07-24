@@ -67,6 +67,7 @@ in pkgs.mkShell {
       # make sure to use nodePackages! or it will install yarn irrespective of environmental node.
       nodejs
       yarn-berry
+      # chromedriver
       # nodePackages.yarn
     ] ++ lib.optionals isDarwin [
       libiconv
