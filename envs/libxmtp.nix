@@ -8,16 +8,17 @@ let
   linters = import ./../linters.nix { inherit pkgs; };
   foundryPkgs =
     import ./../pkgs/foundry-rs/foundry { inherit pkgs rust-toolchain; };
+
   src = pkgs.fetchFromGitHub {
     owner = "xmtp";
     repo = "libxmtp";
     rev = "main";
-    hash = "sha256-da33gxlEe/hHHqoGYyDy9htYl5WvvcOVHdVFHvyCmfs=";
+    hash = "sha256-gunpsSMT88obqG8X21wGKFZXE2XD16zfXbqCzqz3zg4=";
   };
 
   rust-toolchain = fenixPkgs.fromToolchainFile {
     file = "${src}/rust-toolchain";
-    sha256 = "sha256-Ngiz76YP4HTY75GGdH2P+APE/DEIx2R/Dn+BwwOyzZU=";
+    sha256 = "sha256-6eN/GKzjVSjEhGO9FhWObkRFaE1Jf+uqMSdQnb8lcB4=";
   };
 
   #rust-toolchain = with fenixPkgs;

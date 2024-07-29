@@ -101,7 +101,7 @@
           xmtp-proto = (import ./envs/xmtp-proto.nix { inherit pkgs system; });
           wa-sqlite = (import ./envs/wa-sqlite.nix { inherit pkgs system; });
           diesel-async =
-            (import ./envs/diesel-async.nix { inherit pkgs system; });
+            (import ./envs/diesel-async.nix { inherit withRust system fenix; });
         };
       });
 }
