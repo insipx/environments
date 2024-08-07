@@ -7,15 +7,10 @@ let
   fenixPkgs = fenix.packages.${system};
   linters = import ./../linters.nix { inherit pkgs; };
 
-  rust-toolchain = with fenixPkgs;
-    combine [
-      beta.rustc
-      beta.cargo
-      complete.clippy
-      complete.rustfmt
-      complete.llvm-tools-preview
-      targets.wasm32-unknown-unknown.latest.rust-std
-    ];
+  rust-toolchain = fenixPkgs.fromToolchainFile {
+    file = ../rust-toolchain.toml;
+    sha256 = "sha256-6eN/GKzjVSjEhGO9FhWObkRFaE1Jf+uqMSdQnb8lcB4=";
+  };
 in pkgs.mkShell {
   nativeBuildInputs = with pkgs; [ pkg-config ];
   buildInputs = with pkgs;
