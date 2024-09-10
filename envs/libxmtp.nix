@@ -2,8 +2,8 @@
 
 let
   pkgs = withRust;
-  isDarwin = pkgs.stdenv.isDarwin;
-  frameworks = pkgs.darwin.apple_sdk.frameworks;
+  inherit (pkgs.stdenv) isDarwin;
+  inherit (pkgs.darwin.apple_sdk) frameworks;
   fenixPkgs = fenix.packages.${system};
   linters = import ./../linters.nix { inherit pkgs; };
   foundryPkgs =
@@ -13,24 +13,26 @@ let
     owner = "xmtp";
     repo = "libxmtp";
     rev = "main";
-    hash = "sha256-gunpsSMT88obqG8X21wGKFZXE2XD16zfXbqCzqz3zg4=";
+    hash = "sha256-ecnHE7qZiVjMpidHrs7VtMEvnPDeENYwSVpxtB83ij0=";
   };
 
   rust-toolchain = fenixPkgs.fromToolchainFile {
     file = "${src}/rust-toolchain";
-    sha256 = "sha256-6eN/GKzjVSjEhGO9FhWObkRFaE1Jf+uqMSdQnb8lcB4=";
+    sha256 = "sha256-VZZnlyP69+Y3crrLHQyJirqlHrTtGTsyiSnZB8jEvVo=";
   };
 
-  #rust-toolchain = with fenixPkgs;
-  #  combine [
-  #    minimal.rustc
-  #    minimal.cargo
-  #    complete.clippy
-  #    complete.rustfmt
-  #    complete.llvm-tools-preview
-  #    targets.wasm32-unknown-unknown.latest.rust-std
-  #  ];
-in pkgs.mkShell {
+  # rust-toolchain = with fenixPkgs;
+  #   combine [
+  #     minimal.rustc
+  #     minimal.cargo
+  #     complete.clippy
+  #     complete.rustfmt
+  #     complete.llvm-tools-preview
+  #     targets.wasm32-unknown-unknown.latest.rust-std
+  #     targets.wasm32-unknown-emscripten.latest.rust-std
+  #   ];
+in
+pkgs.mkShell {
   nativeBuildInputs = with pkgs; [ pkg-config ];
   buildInputs = with pkgs;
     [
@@ -64,6 +66,9 @@ in pkgs.mkShell {
       flamegraph
       inferno
       act # GH Actions sim
+      wabt
+      cargo-wasi
+      cargo-expand
 
       # make sure to use nodePackages! or it will install yarn irrespective of environmental node.
       nodejs

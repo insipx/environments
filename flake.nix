@@ -27,16 +27,17 @@
     extra-substituters = "https://devenv.cachix.org";
   };
 
-  outputs = { self, nixpkgs, flake-utils, devenv, fenix, solc, ... }@inputs:
+  outputs = { nixpkgs, flake-utils, devenv, fenix, solc, ... }@inputs:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
 
         # Overlays
         pkgBundles =
-          (import ./pkg_bundles.nix { inherit nixpkgs fenix solc system; });
+          import ./pkg_bundles.nix { inherit nixpkgs fenix solc system; };
 
-      in with pkgBundles; {
+      in
+      with pkgBundles; {
         devShells = {
           default = devenv.lib.mkShell {
             inherit pkgs inputs;
@@ -49,23 +50,26 @@
             }];
           };
 
+          rust-nightly =
+            import ./envs/rust-nightly.nix { inherit withRust system fenix; };
+
           libxmtp =
-            (import ./envs/libxmtp.nix { inherit withRust system fenix; });
+            import ./envs/libxmtp.nix { inherit withRust system fenix; };
 
           xmtp-web =
-            (import ./envs/xmtp-web.nix { inherit withRust system fenix; });
+            import ./envs/xmtp-web.nix { inherit withRust system fenix; };
 
-          didethresolver = (import ./envs/didethresolver.nix {
+          didethresolver = import ./envs/didethresolver.nix {
             inherit withRust system fenix;
-          });
+          };
 
-          xps = (import ./envs/xps.nix { inherit withRust system fenix; });
+          xps = import ./envs/xps.nix { inherit withRust system fenix; };
 
-          solidityDev = (import ./envs/solidityDev.nix {
+          solidityDev = import ./envs/solidityDev.nix {
             inherit withNodejs14 fenix solc system;
-          });
+          };
 
-          luaDev = (import ./envs/lua_dev.nix { inherit pkgs; });
+          luaDev = import ./envs/lua_dev.nix { inherit pkgs; };
 
           rustStable = devenv.lib.mkShell {
             inherit inputs pkgs;
@@ -85,23 +89,23 @@
           #  inherit withGo1_20 inputs devenv fenix system;
           #});
 
-          xchat = (import ./envs/xchat.nix { inherit withRust system fenix; });
+          xchat = import ./envs/xchat.nix { inherit withRust system fenix; };
 
           jsonrpsee =
-            (import ./envs/jsonrpsee.nix { inherit withRust system fenix; });
+            import ./envs/jsonrpsee.nix { inherit withRust system fenix; };
 
           walletconnect-sign =
-            (import ./envs/walletconnect-sign.nix { inherit pkgs system; });
+            import ./envs/walletconnect-sign.nix { inherit pkgs system; };
 
-          xmtpd = (import ./envs/xmtpd.nix { inherit pkgs system; });
+          xmtpd = import ./envs/xmtpd.nix { inherit pkgs system; };
 
           xmtp-node-go =
-            (import ./envs/xmtp-node-go.nix { inherit pkgs system; });
+            import ./envs/xmtp-node-go.nix { inherit pkgs system; };
 
-          xmtp-proto = (import ./envs/xmtp-proto.nix { inherit pkgs system; });
-          wa-sqlite = (import ./envs/wa-sqlite.nix { inherit pkgs system; });
+          xmtp-proto = import ./envs/xmtp-proto.nix { inherit pkgs system; };
+          wa-sqlite = import ./envs/wa-sqlite.nix { inherit pkgs system; };
           diesel-async =
-            (import ./envs/diesel-async.nix { inherit withRust system fenix; });
+            import ./envs/diesel-async.nix { inherit withRust system fenix; };
         };
       });
 }

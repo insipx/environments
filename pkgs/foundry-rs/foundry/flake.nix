@@ -9,7 +9,7 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, fenix, flake-utils, ... }@inputs:
+  outputs = { nixpkgs, fenix, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
@@ -23,6 +23,7 @@
             targets.wasm32-unknown-unknown.latest.rust-std
           ];
         buildInputs = [ foundry.anvil foundry.cast ];
-        foundry = (import ./default.nix { inherit pkgs rust-toolchain; });
-      in with pkgs; { devShells.default = mkShell { inherit buildInputs; }; });
+        foundry = import ./default.nix { inherit pkgs rust-toolchain; };
+      in
+      with pkgs; { devShells.default = mkShell { inherit buildInputs; }; });
 }
