@@ -69,6 +69,7 @@ pkgs.mkShell {
       wabt
       cargo-wasi
       cargo-expand
+      cargo-machete
 
       # make sure to use nodePackages! or it will install yarn irrespective of environmental node.
       nodejs

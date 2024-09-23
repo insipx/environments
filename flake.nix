@@ -50,6 +50,10 @@
             }];
           };
 
+
+          converse =
+            import ./envs/converse.nix { inherit pkgs; };
+
           rust-nightly =
             import ./envs/rust-nightly.nix { inherit withRust system fenix; };
 

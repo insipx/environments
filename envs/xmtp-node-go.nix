@@ -1,8 +1,8 @@
-{ pkgs, system, ... }:
+{ pkgs, ... }:
 
 let
-  isDarwin = pkgs.stdenv.isDarwin;
-  frameworks = pkgs.darwin.apple_sdk.frameworks;
+  inherit (pkgs.stdenv) isDarwin;
+  inherit (pkgs.darwin.apple_sdk) frameworks;
   linters = import ./../linters.nix { inherit pkgs; };
   go-lang = import ./../language-packs/go.nix { inherit pkgs; };
   withGo = import <nixpkgs> {
@@ -20,7 +20,8 @@ let
       })
     ];
   };
-in pkgs.mkShell {
+in
+pkgs.mkShell {
   nativeBuildInputs = with pkgs; [ pkg-config ];
   buildInputs = with pkgs;
     [
