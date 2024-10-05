@@ -13,11 +13,16 @@ let
     owner = "xmtp";
     repo = "libxmtp";
     rev = "main";
-    hash = "sha256-ecnHE7qZiVjMpidHrs7VtMEvnPDeENYwSVpxtB83ij0=";
+    hash = "sha256-NxwSm7s6LhK8WpfTZEVe0749Gf3lIksrCUar72LmAp4=";
   };
 
+  # rust-toolchain = fenixPkgs.fromToolchainFile {
+  #   file = "${src}/rust-toolchain";
+  #   sha256 = "sha256-VZZnlyP69+Y3crrLHQyJirqlHrTtGTsyiSnZB8jEvVo=";
+  # };
+
   rust-toolchain = fenixPkgs.fromToolchainFile {
-    file = "${src}/rust-toolchain";
+    file = ./rust-toolchain;
     sha256 = "sha256-VZZnlyP69+Y3crrLHQyJirqlHrTtGTsyiSnZB8jEvVo=";
   };
 
@@ -31,6 +36,7 @@ let
   #     targets.wasm32-unknown-unknown.latest.rust-std
   #     targets.wasm32-unknown-emscripten.latest.rust-std
   #   ];
+
 in
 pkgs.mkShell {
   nativeBuildInputs = with pkgs; [ pkg-config ];
@@ -70,11 +76,18 @@ pkgs.mkShell {
       cargo-wasi
       cargo-expand
       cargo-machete
+      cargo-features-manager
+      cargo-bloat
+      cargo-mutants
+      cargo-deny
+      cargo-audit
+      chromedriver
+      google-chrome
+      geckodriver
 
       # make sure to use nodePackages! or it will install yarn irrespective of environmental node.
       nodejs
       yarn-berry
-      # chromedriver
       # nodePackages.yarn
     ] ++ lib.optionals isDarwin [
       libiconv

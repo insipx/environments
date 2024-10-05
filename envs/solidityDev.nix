@@ -1,9 +1,9 @@
-{ withNodejs14, fenix, solc, system, ... }:
+{ withRust, fenix, solc, system, ... }:
 let
-  pkgs = withNodejs14;
+  pkgs = withRust;
   rust-toolchain = fenix.packages.${system}.stable.toolchain;
   foundryPkgs =
-    (import ./../pkgs/foundry-rs/foundry { inherit pkgs rust-toolchain; });
+     (import ./../pkgs/foundry-rs/foundry { inherit pkgs rust-toolchain; });
   # goEthereumPkg = (import ./../pkgs/go-ethereum { inherit pkgs; });
   linters = import ./../linters.nix { inherit pkgs; };
   isDarwin = pkgs.stdenv.isDarwin;
@@ -20,22 +20,20 @@ in pkgs.mkShell {
   buildInputs = with pkgs;
     [
       rust-toolchain
-      foundryPkgs.anvil
-      foundryPkgs.cast
-      foundryPkgs.chisel
-      foundryPkgs.forge
+    # foundryPkgs.anvil
+    # foundryPkgs.cast
+    # foundryPkgs.chisel
+    # foundryPkgs.forge
       go-ethereum
       nodejs
       # make sure to use nodePackages! or it will install yarn irrespective of environmental node.
       nodePackages.yarn
       wasm-pack
       linters
+      solc-select
     ] ++ pkgs.lib.optionals isDarwin [ libiconv ];
 
   packages = with pkgs; [
-    solc_0_8_21
-    solc_0_8_20
-    solc_0_8_24
-    (solc.mkDefault pkgs solc_0_8_21)
+      
   ];
 }

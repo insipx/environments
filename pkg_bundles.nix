@@ -14,6 +14,9 @@ in {
   #  inherit system;
   #  overlays = with overlays; [ go_1_21_3 ];
   #};
+  pkgs = import nixpkgs {
+    inherit system;
+  };
   withGo1_20 = import nixpkgs {
     inherit system;
     overlays = [ custom_overlays.go_1_20 ];
@@ -21,6 +24,7 @@ in {
   withRust = import nixpkgs {
     inherit system;
     overlays = [ fenix.overlays.default ];
+    config.allowUnfree = true;
   };
   withRustAndSolc = import nixpkgs {
     inherit system;

@@ -30,9 +30,6 @@
   outputs = { nixpkgs, flake-utils, devenv, fenix, solc, ... }@inputs:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = import nixpkgs { inherit system; };
-
-        # Overlays
         pkgBundles =
           import ./pkg_bundles.nix { inherit nixpkgs fenix solc system; };
 
@@ -70,7 +67,7 @@
           xps = import ./envs/xps.nix { inherit withRust system fenix; };
 
           solidityDev = import ./envs/solidityDev.nix {
-            inherit withNodejs14 fenix solc system;
+            inherit withRust fenix solc system;
           };
 
           luaDev = import ./envs/lua_dev.nix { inherit pkgs; };
