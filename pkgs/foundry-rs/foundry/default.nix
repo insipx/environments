@@ -6,7 +6,7 @@ let
     owner = "foundry-rs";
     repo = "foundry";
     rev = "nightly";
-    hash = "sha256-iUKx9zRnZ23DON0KLkdfHAD1Z2mxCt25qTg4SkiU5e8=";
+    hash = "sha256-N1hEiUQx7LaKJBwecqqxGrNTIIT3F5S73IK6pofmChg=";
   };
   cargoLock = {
     lockFile = "${src}/Cargo.lock";
