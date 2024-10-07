@@ -54,6 +54,9 @@
           rust-nightly =
             import ./envs/rust-nightly.nix { inherit withRust system fenix; };
 
+          rust-stable =
+            import ./envs/rust-stable.nix { inherit withRust system fenix; };
+
           libxmtp =
             import ./envs/libxmtp.nix { inherit withRust system fenix; };
 

@@ -9,13 +9,12 @@ let
 
   rust-toolchain = with fenixPkgs;
     combine [
-      minimal.rustc
-      minimal.cargo
-      complete.clippy
-      complete.rustfmt
-      complete.llvm-tools-preview
-      targets.wasm32-unknown-unknown.latest.rust-std
-      targets.wasm32-wasi.latest.rust-std
+     stable.rustc
+     stable.cargo
+     stable.clippy
+     stable.rustfmt
+     stable.llvm-tools-preview
+     targets.wasm32-unknown-unknown.latest.rust-std
     ];
 in
 pkgs.mkShell {
