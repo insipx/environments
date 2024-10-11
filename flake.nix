@@ -1,4 +1,4 @@
-{
+
   inputs = {
     devenv.url = "github:cachix/devenv";
     #   cargo2nix = {
@@ -59,9 +59,8 @@
 
           libxmtp =
             import ./envs/libxmtp.nix { inherit withRust system fenix; };
-
-          xmtp-web =
-            import ./envs/xmtp-web.nix { inherit withRust system fenix; };
+          xmtp-js =
+            import ./envs/xmtp-js.nix { inherit pkgs system; };
 
           didethresolver = import ./envs/didethresolver.nix {
             inherit withRust system fenix;
