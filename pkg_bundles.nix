@@ -17,6 +17,17 @@ in {
   pkgs = import nixpkgs {
     inherit system;
   };
+  pkgsUnfree = import nixpkgs {
+    inherit system;
+    config.allowUnfree = true;
+  };
+  pkgsAndroid = import nixpkgs {
+    inherit system;
+    config = {
+      android_sdk.accept_license = true;
+      allowUnfree = true;
+    };
+  };
   withGo1_20 = import nixpkgs {
     inherit system;
     overlays = [ custom_overlays.go_1_20 ];
@@ -25,6 +36,7 @@ in {
     inherit system;
     overlays = [ fenix.overlays.default ];
     config.allowUnfree = true;
+    config.android_sdk.accept_license = true;
   };
   withRustAndSolc = import nixpkgs {
     inherit system;

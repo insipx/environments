@@ -30,4 +30,7 @@ pkgs.mkShell {
       frameworks.AppKit
       darwin.cctools
     ];
+    shellHook = ''
+      export VITE_PROJECT_ID="2ca676e2e5e9322c40c68f10dca637e5"
+    '';
 }
