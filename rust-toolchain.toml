@@ -7,7 +7,10 @@ targets = [
   "aarch64-linux-android",
   "armv7-linux-androideabi",
   "x86_64-linux-android",
-  "i686-linux-android"
+  "i686-linux-android",
+  "x86_64-apple-ios",
+  "x86_64-apple-darwin",
+  "aarch64-apple-ios"
 ]
 
 profile = "default"

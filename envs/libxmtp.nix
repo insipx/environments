@@ -4,6 +4,7 @@ let
   pkgs = withRust;
   inherit (pkgs.stdenv) isDarwin;
   inherit (pkgs.darwin.apple_sdk) frameworks;
+  inherit (pkgs) androidenv;
   fenixPkgs = fenix.packages.${system};
   linters = import ./../linters.nix { inherit pkgs; };
   foundryPkgs =
@@ -36,22 +37,22 @@ let
   #     targets.wasm32-unknown-unknown.latest.rust-std
   #     targets.wasm32-unknown-emscripten.latest.rust-std
   #   ];
-
-  androidComposition = pkgs.androidenv.composeAndroidPackages {
+  androidComposition = androidenv.composeAndroidPackages {
     includeNDK = true;
     platformToolsVersion = "33.0.3";
-    platformVersions = [ "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" ];
+    platformVersions = [ "34" ];
     buildToolsVersions = [ "30.0.3" ];
   };
-  shellHook = ''
-    export OPENSSL_DIR="${pkgs.openssl.dev}"
-    export ANDROID_HOME="${androidComposition.androidsdk}/libexec/android-sdk"
-    export ANDROID_NDK_ROOT="$ANDROID_HOME/ndk-bundle"
-    # export PATH="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/darwin-x86_64/bin $PATH"
-  '';
+
+  # shellHook = ''
+  #   export OPENSSL_DIR="${pkgs.openssl.dev}"
+  #   export ANDROID_HOME="${androidComposition.androidsdk}/libexec/android-sdk"
+  #   export ANDROID_NDK_ROOT="$ANDROID_HOME/ndk-bundle"
+  #   # export PATH="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/darwin-x86_64/bin $PATH"
+  # '';
 in
 pkgs.mkShell {
-  inherit shellHook;
+  # inherit shellHook;
   nativeBuildInputs = with pkgs; [ pkg-config ];
   buildInputs = with pkgs;
     [
@@ -59,7 +60,7 @@ pkgs.mkShell {
       rust-analyzer
       # llvmPackages_16.libcxxClang
       mktemp
-      jdk21
+      jdk17
       kotlin
       shellcheck
       buf
@@ -96,10 +97,11 @@ pkgs.mkShell {
       cargo-audit
       cargo-cross
       cargo-ndk
+      cargo-swift
       chromedriver
       google-chrome
       geckodriver
-        # android-studio-tools
+      # android-studio-tools
       openssl
       sqlite
 
@@ -113,6 +115,7 @@ pkgs.mkShell {
       frameworks.Carbon
       frameworks.ApplicationServices
       frameworks.AppKit
+      frameworks.Security
       darwin.cctools
     ];
 }

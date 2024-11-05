@@ -59,8 +59,10 @@
 
           libxmtp =
             import ./envs/libxmtp.nix { inherit withRust system fenix; };
+
           xmtp-js =
             import ./envs/xmtp-js.nix { inherit pkgs system; };
+
           xmtp-android =
               import ./envs/xmtp-android.nix { inherit pkgsAndroid system; };
 
