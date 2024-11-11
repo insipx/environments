@@ -1,6 +1,5 @@
 {
   inputs = {
-    devenv.url = "github:cachix/devenv";
     #   cargo2nix = {
     #     url = "github:cargo2nix/cargo2nix/release-0.11.0";
     #     inputs = { nixpkgs.follows = "nixpkgs"; };
@@ -17,52 +16,32 @@
         nixpkgs.follows = "nixpkgs";
       };
     };
-
+    foundry.url = "github:shazow/foundry.nix/monthly"; # Use monthly branch for permanent releases
     flake-utils = { url = "github:numtide/flake-utils"; };
   };
 
-  nixConfig = {
-    extra-trusted-public-keys =
-      "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=";
-    extra-substituters = "https://devenv.cachix.org";
-  };
-
-  outputs = { nixpkgs, flake-utils, devenv, fenix, solc, ... }@inputs:
+  outputs = { nixpkgs, flake-utils, fenix, foundry, solc, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgBundles =
-          import ./pkg_bundles.nix { inherit nixpkgs fenix solc system; };
-
+          import ./pkg-bundles { inherit nixpkgs fenix foundry system; };
       in
       with pkgBundles; {
         devShells = {
-          default = devenv.lib.mkShell {
-            inherit pkgs inputs;
-            modules = [{
-              # https://devenv.sh/reference/options/
-              packages = [ pkgs.hello ];
-              enterShell = ''
-                hello
-              '';
-            }];
-          };
-
 
           converse =
             import ./envs/converse.nix { inherit pkgs; };
 
-          rust-nightly =
-            import ./envs/rust-nightly.nix { inherit withRust system fenix; };
+          rust-nightly = (callPackage pkgsRust) ./envs/rust-nightly.nix { inherit fenix system; };
+          rust-stable = (callPackage pkgsRust) ./envs/rust-stable.nix { inherit fenix system; };
+          libxmtp = (callPackage pkgsRust) ./envs/libxmtp.nix { inherit fenix system; };
 
-          rust-stable =
-            import ./envs/rust-stable.nix { inherit withRust system fenix; };
-
-          libxmtp =
-            import ./envs/libxmtp.nix { inherit withRust system fenix; };
           xmtp-js =
-            import ./envs/xmtp-js.nix { inherit pkgs system; };
+            import ./envs/xmtp-js.nix {
+              inherit pkgs system;
+            };
           xmtp-android =
-              import ./envs/xmtp-android.nix { inherit pkgsAndroid system; };
+            import ./envs/xmtp-android.nix { inherit pkgsAndroid system; };
 
           didethresolver = import ./envs/didethresolver.nix {
             inherit withRust system fenix;
@@ -75,24 +54,6 @@
           };
 
           luaDev = import ./envs/lua_dev.nix { inherit pkgs; };
-
-          rustStable = devenv.lib.mkShell {
-            inherit inputs pkgs;
-            modules = [{
-              languages.rust = {
-                enable = true;
-                channel = "stable";
-              };
-              packages = [ ];
-              enterShell = ''
-                General Rust Dev Environment with latest stable rust in flake.
-              '';
-            }];
-          };
-
-          #solidityAndRust = (import ./envs/solidityAndRustDev.nix {
-          #  inherit withGo1_20 inputs devenv fenix system;
-          #});
 
           xchat = import ./envs/xchat.nix { inherit withRust system fenix; };
 

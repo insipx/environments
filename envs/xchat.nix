@@ -1,8 +1,8 @@
 { pkgsWithRust, system, fenix, ... }:
 
 let
-  pkgs = pkgsWithRust;
-  isDarwin = pkgs.stdenv.isDarwin;
+  pkgs = pkgsWithRust
+    isDarwin = pkgs.stdenv.isDarwin;
   frameworks = pkgs.darwin.apple_sdk.frameworks;
   fenixPkgs = fenix.packages.${system};
   linters = import ./linters.nix { inherit pkgs; };
@@ -21,7 +21,8 @@ let
       complete.rustfmt
       targets.wasm32-unknown-unknown.latest.rust-std
     ];
-in pkgs.mkShell {
+in
+pkgs.mkShell {
   nativeBuildInputs = with pkgs; [ pkg-config ];
   buildInputs = with pkgs;
     [
