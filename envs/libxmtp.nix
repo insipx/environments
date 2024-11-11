@@ -45,7 +45,7 @@ let
   androidComposition = androidenv.composeAndroidPackages {
     includeNDK = true;
     platformToolsVersion = "33.0.3";
-    platformVersions = [ "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" ];
+    platformVersions = [ "34" ];
     buildToolsVersions = [ "30.0.3" ];
   };
 in
@@ -89,5 +89,4 @@ mkShell {
     frameworks.AppKit
     darwin.cctools
   ];
-
 }

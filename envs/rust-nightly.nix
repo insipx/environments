@@ -1,4 +1,4 @@
-{ mkCargo
+{ shells
 , stdenv
 , darwin
 , fenix
@@ -24,7 +24,7 @@ let
       targets.wasm32-wasi.latest.rust-std
     ];
 in
-mkCargo {
+shells.mkCargo {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = with fenixPkgs; [
     rust-toolchain
