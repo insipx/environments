@@ -7,13 +7,12 @@ callPackage: pkgs: {
     mkLinters = extraInputs: (callPackage pkgs ./mkLinters.nix {
       inherit extraInputs;
     });
-
     mkCargo = extraInputs: (callPackage pkgs ./mkCargo.nix {
       inherit extraInputs;
     });
-
     mkRustWasm = extraInputs: (callPackage pkgs ./mkRustWasm.nix { inherit extraInputs; });
+    mkGrpc = extraInputs: (callPackage pkgs ./mkGrpc.nix { inherit extraInputs; });
 
-    combineShell = otherShells: (callPackage pkgs ./combineShell.nix { inherit otherShells; });
+    combineShell = otherShells: extraInputs: (callPackage pkgs ./combineShell.nix { inherit otherShells extraInputs; });
   };
 }

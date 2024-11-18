@@ -9,23 +9,18 @@
 , mktemp
 , jdk21
 , kotlin
-, buf
-, curl
 , diesel-cli
-, protobuf
-, protoc-gen-prost-crate
 , tokio-console
-, protolint
 , gource
 , gnuplot
 , flamegraph
 , inferno
-, act # GH Actions sim
 , cargo-ndk
 , openssl
 , sqlite
 , corepack
 , libiconv
+, lnav
 , ...
 }:
 
@@ -34,8 +29,10 @@ let
   inherit (darwin.apple_sdk) frameworks;
   inherit (shells) combineShell;
   fenixPkgs = fenix.packages.${system};
-  mkShell = top: (combineShell (with shells;
-    [ (mkLinters { }) (mkCargo { }) (mkRustWasm { }) top ]));
+  mkShell = top: (combineShell
+    (with shells;
+    [ mkLinters mkCargo mkRustWasm mkGrpc ])
+    top);
 
   rust-toolchain = fenixPkgs.fromToolchainFile {
     file = ./../rust-toolchain.toml;
@@ -48,11 +45,12 @@ let
     platformVersions = [ "34" ];
     buildToolsVersions = [ "30.0.3" ];
   };
+  ANDROID_HOME = "${androidComposition.androidsdk}/libexec/android-sdk";
+  ANDROID_NDK_ROOT = "${ANDROID_HOME}/ndk-bundle";
 in
 mkShell {
+  inherit ANDROID_HOME ANDROID_NDK_ROOT;
   OPENSSL_DIR = "${openssl.dev}";
-  ANDROID_HOME = "${androidComposition.androidsdk}/libexec/android-sdk";
-  ANDROID_NDK_ROOT = "$ANDROID_HOME/ndk-bundle";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -62,22 +60,18 @@ mkShell {
     mktemp
     jdk21
     kotlin
-    buf
-    curl
     diesel-cli
 
-    protobuf
-    protoc-gen-prost-crate
     tokio-console
-    protolint
     gource
     gnuplot
     flamegraph
     inferno
-    act # GH Actions sim
     cargo-ndk
     openssl
     sqlite
+
+    lnav
 
     # make sure to use nodePackages! or it will install yarn irrespective of environmental node.
     corepack

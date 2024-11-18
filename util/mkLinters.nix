@@ -15,33 +15,33 @@
 , golangci-lint
 , ktlint
 , mkShell
-, extraInputs
+, extraInputs ? { }
 }:
-mkShell {
-  name = "Common Linters + Formatters";
-  buildInputs = [
-    dprint
-    stylua
-    deno
-    nixfmt
-    yamlfmt
-    rubyPackages.htmlbeautifier
+(mkShell
+  {
+    name = "Common Linters + Formatters";
+    buildInputs = [
+      dprint
+      stylua
+      deno
+      nixfmt
+      yamlfmt
+      rubyPackages.htmlbeautifier
 
-    # Linters
-    # cbfmt
-    dotenv-linter
-    gitlint
-    html-tidy
-    statix
-    deadnix
-    markdownlint-cli
-    shellcheck
-    golangci-lint
-    ktlint
-  ];
+      # Linters
+      # cbfmt
+      dotenv-linter
+      gitlint
+      html-tidy
+      statix
+      deadnix
+      markdownlint-cli
+      shellcheck
+      golangci-lint
+      ktlint
+    ];
 
-  inputsFrom = [ extraInputs ];
-}
+  } // extraInputs)
 
 
 

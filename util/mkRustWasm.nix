@@ -7,17 +7,17 @@
 , google-chrome
 , geckodriver
 , mkShell
-, extraInputs
+, extraInputs ? { }
 , ...
-}: mkShell {
-  buildInputs = [
-    twiggy
-    binaryen
-    wasm-pack
-    wabt
-    chromedriver
-    google-chrome
-    geckodriver
-  ];
-  inputsFrom = [ extraInputs ];
-}
+}: (mkShell
+  {
+    buildInputs = [
+      twiggy
+      binaryen
+      wasm-pack
+      wabt
+      chromedriver
+      google-chrome
+      geckodriver
+    ];
+  } // extraInputs)

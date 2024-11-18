@@ -9,21 +9,21 @@
 , cargo-audit
 , cargo-nextest
 , cargo-udeps
-, extraInputs
+, extraInputs ? { }
 , mkShell
 , ...
-}: mkShell {
-  buildInputs = [
-    cargo-cache
-    cargo-expand
-    cargo-machete
-    cargo-features-manager
-    cargo-bloat
-    cargo-mutants
-    cargo-deny
-    cargo-audit
-    cargo-nextest
-    cargo-udeps
-  ];
-  inputsFrom = [ extraInputs ];
-}
+}: (mkShell
+  {
+    buildInputs = [
+      cargo-cache
+      cargo-expand
+      cargo-machete
+      cargo-features-manager
+      cargo-bloat
+      cargo-mutants
+      cargo-deny
+      cargo-audit
+      cargo-nextest
+      cargo-udeps
+    ];
+  } // extraInputs)
