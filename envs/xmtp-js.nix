@@ -1,33 +1,43 @@
-{ pkgs, ... }:
+{
+  shells,
+  stdenv,
+  darwin,
+  mktemp,
+  buf,
+  curl,
+  geckodriver,
+  corepack,
+  pkg-config,
+  lib,
+}:
 
 let
-  inherit (pkgs.stdenv) isDarwin;
-  inherit (pkgs.darwin.apple_sdk) frameworks;
-  linters = import ./../linters.nix { inherit pkgs; };
+  inherit (darwin.apple_sdk) frameworks;
+  # linters = import ./../linters.nix { inherit pkgs; };
+  mkShell =
+    top:
+    (shells.combineShell (with shells; [
+      mkLinters
+    ]) top);
 in
-pkgs.mkShell {
-  nativeBuildInputs = with pkgs; [ pkg-config ];
-  buildInputs = with pkgs;
+mkShell {
+  name = "xmtp-js environment";
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs =
     [
       mktemp
-      shellcheck
       buf
       curl
-      linters
       geckodriver
 
       corepack
-      go-ethereum
-      nodePackages.typescript
-    ] ++ lib.optionals isDarwin [
-      libiconv
+    ]
+    ++ lib.optionals stdenv.isDarwin [
       frameworks.CoreServices
       frameworks.Carbon
       frameworks.ApplicationServices
       frameworks.AppKit
       darwin.cctools
     ];
-    shellHook = ''
-      export VITE_PROJECT_ID="2ca676e2e5e9322c40c68f10dca637e5"
-    '';
+  VITE_PROJECT_ID = "2ca676e2e5e9322c40c68f10dca637e5";
 }

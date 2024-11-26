@@ -1,11 +1,11 @@
-{ mkCargo
-, fenix
-, system
-, curl
-, stdenv
-, darwin
-, pkg-config
-, libiconv
+{
+  mkCargo,
+  fenix,
+  system,
+  curl,
+  stdenv,
+  darwin,
+  pkg-config,
 }:
 
 let
@@ -13,7 +13,8 @@ let
   inherit (darwin.apple_sdk) frameworks;
   fenixPkgs = fenix.packages.${system};
 
-  rust-toolchain = with fenixPkgs;
+  rust-toolchain =
+    with fenixPkgs;
     combine [
       stable.rustc
       stable.cargo
@@ -25,16 +26,18 @@ let
 in
 mkCargo {
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = with fenixPkgs; [
-    rust-toolchain
-    rust-analyzer
-    curl
-  ] ++ lib.optionals isDarwin [
-    libiconv
-    frameworks.CoreServices
-    frameworks.Carbon
-    frameworks.ApplicationServices
-    frameworks.AppKit
-    darwin.cctools
-  ];
+  buildInputs =
+    with fenixPkgs;
+    [
+      rust-toolchain
+      rust-analyzer
+      curl
+    ]
+    ++ lib.optionals isDarwin [
+      frameworks.CoreServices
+      frameworks.Carbon
+      frameworks.ApplicationServices
+      frameworks.AppKit
+      darwin.cctools
+    ];
 }

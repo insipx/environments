@@ -5,18 +5,20 @@ let
   frameworks = pkgs.darwin.apple_sdk.frameworks;
   linters = import ./../linters.nix { inherit pkgs; };
 
-  #rust-toolchain = with fenixPkgs;
-  #  combine [
-  #    minimal.rustc
-  #    minimal.cargo
-  #    complete.clippy
-  #    complete.rustfmt
-  #    complete.llvm-tools-preview
-  #    targets.wasm32-unknown-unknown.latest.rust-std
-  #  ];
-in pkgs.mkShell {
+in
+#rust-toolchain = with fenixPkgs;
+#  combine [
+#    minimal.rustc
+#    minimal.cargo
+#    complete.clippy
+#    complete.rustfmt
+#    complete.llvm-tools-preview
+#    targets.wasm32-unknown-unknown.latest.rust-std
+#  ];
+pkgs.mkShell {
   nativeBuildInputs = with pkgs; [ pkg-config ];
-  buildInputs = with pkgs;
+  buildInputs =
+    with pkgs;
     [
       mktemp
       shellcheck
@@ -30,8 +32,8 @@ in pkgs.mkShell {
       yarn-berry
       emscripten
       # nodePackages.yarn
-    ] ++ lib.optionals isDarwin [
-      libiconv
+    ]
+    ++ lib.optionals isDarwin [
       frameworks.CoreServices
       frameworks.Carbon
       frameworks.ApplicationServices

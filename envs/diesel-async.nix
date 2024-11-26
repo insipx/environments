@@ -1,4 +1,9 @@
-{ withRust, system, fenix, ... }:
+{
+  withRust,
+  system,
+  fenix,
+  ...
+}:
 
 let
   pkgs = withRust;
@@ -11,9 +16,11 @@ let
     file = ../rust-toolchain.toml;
     sha256 = "sha256-6eN/GKzjVSjEhGO9FhWObkRFaE1Jf+uqMSdQnb8lcB4=";
   };
-in pkgs.mkShell {
+in
+pkgs.mkShell {
   nativeBuildInputs = with pkgs; [ pkg-config ];
-  buildInputs = with pkgs;
+  buildInputs =
+    with pkgs;
     [
       rust-toolchain
       rust-analyzer
@@ -36,8 +43,8 @@ in pkgs.mkShell {
       cargo-udeps
       cargo-sweep
       act # GH Actions sim
-    ] ++ lib.optionals isDarwin [
-      libiconv
+    ]
+    ++ lib.optionals isDarwin [
       frameworks.CoreServices
       frameworks.Carbon
       frameworks.ApplicationServices

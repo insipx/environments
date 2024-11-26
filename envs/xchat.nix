@@ -42,7 +42,6 @@ pkgs.mkShell {
       linters
       tokio-console
     ] ++ lib.optionals isDarwin [
-      libiconv
       frameworks.CoreServices
       frameworks.Carbon
       frameworks.ApplicationServices

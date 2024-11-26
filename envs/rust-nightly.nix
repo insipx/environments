@@ -1,19 +1,20 @@
-{ shells
-, stdenv
-, darwin
-, fenix
-, system
-, pkg-config
-, libiconv
-, tokio-console
-, curl
+{
+  shells,
+  stdenv,
+  darwin,
+  fenix,
+  system,
+  pkg-config,
+  tokio-console,
+  curl,
 }:
 let
   inherit (stdenv) isDarwin;
   inherit (darwin.apple_sdk) frameworks;
   fenixPkgs = fenix.packages.${system};
 
-  rust-toolchain = with fenixPkgs;
+  rust-toolchain =
+    with fenixPkgs;
     combine [
       minimal.rustc
       minimal.cargo
@@ -26,24 +27,26 @@ let
 in
 shells.mkCargo {
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = with fenixPkgs; [
-    rust-toolchain
-    rust-analyzer
+  buildInputs =
+    with fenixPkgs;
+    [
+      rust-toolchain
+      rust-analyzer
 
-    sqlite
-    mktemp
-    curl
-    tokio-console
+      sqlite
+      mktemp
+      curl
+      tokio-console
 
-    sqlite
-    mysql80
-    # mariadb_106
-  ] ++ lib.optionals isDarwin [
-    libiconv
-    frameworks.CoreServices
-    frameworks.Carbon
-    frameworks.ApplicationServices
-    frameworks.AppKit
-    darwin.cctools
-  ];
+      sqlite
+      mysql80
+      # mariadb_106
+    ]
+    ++ lib.optionals isDarwin [
+      frameworks.CoreServices
+      frameworks.Carbon
+      frameworks.ApplicationServices
+      frameworks.AppKit
+      darwin.cctools
+    ];
 }

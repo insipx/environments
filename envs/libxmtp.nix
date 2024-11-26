@@ -1,27 +1,28 @@
-{ stdenv
-, darwin
-, lib
-, system
-, fenix
-, shells
-, androidenv
-, pkg-config
-, mktemp
-, jdk21
-, kotlin
-, diesel-cli
-, tokio-console
-, gource
-, gnuplot
-, flamegraph
-, inferno
-, cargo-ndk
-, openssl
-, sqlite
-, corepack
-, libiconv
-, lnav
-, ...
+{
+  stdenv,
+  darwin,
+  lib,
+  system,
+  fenix,
+  shells,
+  androidenv,
+  pkg-config,
+  mktemp,
+  jdk21,
+  kotlin,
+  diesel-cli,
+  tokio-console,
+  gource,
+  gnuplot,
+  flamegraph,
+  inferno,
+  cargo-ndk,
+  openssl,
+  sqlite,
+  corepack,
+  lnav,
+  fblog,
+  ...
 }:
 
 let
@@ -29,10 +30,14 @@ let
   inherit (darwin.apple_sdk) frameworks;
   inherit (shells) combineShell;
   fenixPkgs = fenix.packages.${system};
-  mkShell = top: (combineShell
-    (with shells;
-    [ mkLinters mkCargo mkRustWasm mkGrpc ])
-    top);
+  mkShell =
+    top:
+    (combineShell (with shells; [
+      mkLinters
+      mkCargo
+      mkRustWasm
+      mkGrpc
+    ]) top);
 
   rust-toolchain = fenixPkgs.fromToolchainFile {
     file = ./../rust-toolchain.toml;
@@ -53,34 +58,36 @@ mkShell {
   OPENSSL_DIR = "${openssl.dev}";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    rust-toolchain
-    fenixPkgs.rust-analyzer
+  buildInputs =
+    [
+      rust-toolchain
+      fenixPkgs.rust-analyzer
 
-    mktemp
-    jdk21
-    kotlin
-    diesel-cli
+      mktemp
+      jdk21
+      kotlin
+      diesel-cli
 
-    tokio-console
-    gource
-    gnuplot
-    flamegraph
-    inferno
-    cargo-ndk
-    openssl
-    sqlite
+      tokio-console
+      gource
+      gnuplot
+      flamegraph
+      inferno
+      cargo-ndk
+      openssl
+      sqlite
 
-    lnav
+      lnav
+      fblog
 
-    # make sure to use nodePackages! or it will install yarn irrespective of environmental node.
-    corepack
-  ] ++ lib.optionals isDarwin [
-    libiconv
-    frameworks.CoreServices
-    frameworks.Carbon
-    frameworks.ApplicationServices
-    frameworks.AppKit
-    darwin.cctools
-  ];
+      # make sure to use nodePackages! or it will install yarn irrespective of environmental node.
+      corepack
+    ]
+    ++ lib.optionals isDarwin [
+      frameworks.CoreServices
+      frameworks.Carbon
+      frameworks.ApplicationServices
+      frameworks.AppKit
+      darwin.cctools
+    ];
 }

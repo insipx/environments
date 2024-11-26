@@ -1,4 +1,9 @@
-{ withRust, system, fenix, ... }:
+{
+  withRust,
+  system,
+  fenix,
+  ...
+}:
 
 let
   pkgs = withRust;
@@ -6,8 +11,7 @@ let
   frameworks = pkgs.darwin.apple_sdk.frameworks;
   fenixPkgs = fenix.packages.${system};
   linters = import ./../linters.nix { inherit pkgs; };
-  foundryPkgs =
-    import ./../pkgs/foundry-rs/foundry { inherit pkgs rust-toolchain; };
+  foundryPkgs = import ./../pkgs/foundry-rs/foundry { inherit pkgs rust-toolchain; };
   src = pkgs.fetchFromGitHub {
     owner = "xmtp";
     repo = "libxmtp";
@@ -20,18 +24,20 @@ let
     sha256 = "sha256-opUgs6ckUQCyDxcB9Wy51pqhd0MPGHUVbwRKKPGiwZU=";
   };
 
-  #rust-toolchain = with fenixPkgs;
-  #  combine [
-  #    minimal.rustc
-  #    minimal.cargo
-  #    complete.clippy
-  #    complete.rustfmt
-  #    complete.llvm-tools-preview
-  #    targets.wasm32-unknown-unknown.latest.rust-std
-  #  ];
-in pkgs.mkShell {
+in
+#rust-toolchain = with fenixPkgs;
+#  combine [
+#    minimal.rustc
+#    minimal.cargo
+#    complete.clippy
+#    complete.rustfmt
+#    complete.llvm-tools-preview
+#    targets.wasm32-unknown-unknown.latest.rust-std
+#  ];
+pkgs.mkShell {
   nativeBuildInputs = with pkgs; [ pkg-config ];
-  buildInputs = with pkgs;
+  buildInputs =
+    with pkgs;
     [
       rust-toolchain
       rust-analyzer
@@ -67,8 +73,8 @@ in pkgs.mkShell {
       # make sure to use nodePackages! or it will install yarn irrespective of environmental node.
       nodejs
       nodePackages.yarn
-    ] ++ lib.optionals isDarwin [
-      libiconv
+    ]
+    ++ lib.optionals isDarwin [
       frameworks.CoreServices
       frameworks.Carbon
       frameworks.ApplicationServices

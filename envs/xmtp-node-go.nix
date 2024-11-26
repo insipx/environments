@@ -8,22 +8,27 @@ let
   withGo = import <nixpkgs> {
     overlays = [
       (self: super: {
-        go = super.go.overrideAttrs (oldAttrs:
-          let version = "1.20";
-          in {
+        go = super.go.overrideAttrs (
+          oldAttrs:
+          let
+            version = "1.20";
+          in
+          {
             inherit version;
             src = super.fetchurl {
               url = "https://dl.google.com/go/go${version}.src.tar.gz";
               sha256 = "sha256-Oin/BCG+r2MpKSuKRjEcn78GyAAHfO3e9ft/jVsazjM=";
             };
-          });
+          }
+        );
       })
     ];
   };
 in
 pkgs.mkShell {
   nativeBuildInputs = with pkgs; [ pkg-config ];
-  buildInputs = with pkgs;
+  buildInputs =
+    with pkgs;
     [
       withGo.go
       mktemp
@@ -37,8 +42,8 @@ pkgs.mkShell {
       mockgen
       moreutils
       protoc-gen-go
-    ] ++ lib.optionals isDarwin [
-      libiconv
+    ]
+    ++ lib.optionals isDarwin [
       frameworks.CoreServices
       frameworks.Carbon
       frameworks.ApplicationServices

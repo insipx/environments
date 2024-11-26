@@ -1,4 +1,9 @@
-{ withRust, system, fenix, ... }:
+{
+  withRust,
+  system,
+  fenix,
+  ...
+}:
 
 let
   pkgs = withRust;
@@ -6,7 +11,8 @@ let
   frameworks = pkgs.darwin.apple_sdk.frameworks;
   fenixPkgs = fenix.packages.${system};
   linters = import ./../linters.nix { inherit pkgs; };
-  rust-toolchain = with fenixPkgs;
+  rust-toolchain =
+    with fenixPkgs;
     combine [
       stable.rustc
       stable.cargo
@@ -15,9 +21,11 @@ let
       stable.llvm-tools-preview
       targets.wasm32-unknown-unknown.latest.rust-std
     ];
-in pkgs.mkShell {
+in
+pkgs.mkShell {
   nativeBuildInputs = with pkgs; [ pkg-config ];
-  buildInputs = with pkgs;
+  buildInputs =
+    with pkgs;
     [
       rust-toolchain
       rust-analyzer
@@ -26,8 +34,8 @@ in pkgs.mkShell {
       linters
       tokio-console
       cargo-nextest
-    ] ++ lib.optionals isDarwin [
-      libiconv
+    ]
+    ++ lib.optionals isDarwin [
       frameworks.CoreServices
       frameworks.Carbon
       frameworks.ApplicationServices

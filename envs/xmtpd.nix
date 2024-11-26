@@ -4,9 +4,11 @@ let
   isDarwin = pkgs.stdenv.isDarwin;
   frameworks = pkgs.darwin.apple_sdk.frameworks;
   linters = import ./../linters.nix { inherit pkgs; };
-in pkgs.mkShell {
+in
+pkgs.mkShell {
   nativeBuildInputs = with pkgs; [ pkg-config ];
-  buildInputs = with pkgs;
+  buildInputs =
+    with pkgs;
     [
       # llvmPackages_16.libcxxClang
       mktemp
@@ -19,8 +21,8 @@ in pkgs.mkShell {
       go
       gopls
       mockgen
-    ] ++ lib.optionals isDarwin [
-      libiconv
+    ]
+    ++ lib.optionals isDarwin [
       frameworks.CoreServices
       frameworks.Carbon
       frameworks.ApplicationServices
