@@ -52,6 +52,7 @@
           rust-stable = (callPackage pkgsRust) ./envs/rust-stable.nix { inherit fenix system; };
           libxmtp = (callPackage pkgsRust) ./envs/libxmtp.nix { inherit fenix system; };
           xmtp-js = (callPackage pkgs) ./envs/xmtp-js.nix { };
+          xmtp-node-go = (callPackage pkgs) ./envs/xmtp-node-go.nix { };
           xmtp-android = import ./envs/xmtp-android.nix { inherit pkgsAndroid system; };
 
           solidityDev = import ./envs/solidityDev.nix {
@@ -72,8 +73,6 @@
           walletconnect-sign = import ./envs/walletconnect-sign.nix { inherit pkgs system; };
 
           xmtpd = import ./envs/xmtpd.nix { inherit pkgs system; };
-
-          xmtp-node-go = import ./envs/xmtp-node-go.nix { inherit pkgs system; };
 
           xmtp-proto = import ./envs/xmtp-proto.nix { inherit pkgs system; };
           wa-sqlite = import ./envs/wa-sqlite.nix { inherit pkgs system; };

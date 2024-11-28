@@ -22,6 +22,9 @@
   corepack,
   lnav,
   fblog,
+  sccache,
+  grpcui,
+  bruno,
   ...
 }:
 
@@ -76,9 +79,12 @@ mkShell {
       cargo-ndk
       openssl
       sqlite
+      sccache
 
       lnav
       fblog
+      grpcui
+      bruno
 
       # make sure to use nodePackages! or it will install yarn irrespective of environmental node.
       corepack
@@ -90,4 +96,7 @@ mkShell {
       frameworks.AppKit
       darwin.cctools
     ];
+
+  RUSTC_WRAPPER = "${sccache}/bin/sccache";
+  SCCACHE_CACHE_SIZE = "50G";
 }
