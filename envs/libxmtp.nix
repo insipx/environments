@@ -1,31 +1,28 @@
-{
-  stdenv,
-  darwin,
-  lib,
-  system,
-  fenix,
-  shells,
-  androidenv,
-  pkg-config,
-  mktemp,
-  jdk21,
-  kotlin,
-  diesel-cli,
-  tokio-console,
-  gource,
-  gnuplot,
-  flamegraph,
-  inferno,
-  cargo-ndk,
-  openssl,
-  sqlite,
-  corepack,
-  lnav,
-  fblog,
-  sccache,
-  grpcui,
-  bruno,
-  ...
+{ stdenv
+, darwin
+, lib
+, system
+, fenix
+, shells
+, androidenv
+, pkg-config
+, mktemp
+, jdk21
+, kotlin
+, diesel-cli
+, tokio-console
+, gource
+, gnuplot
+, flamegraph
+, cargo-flamegraph
+, inferno
+, cargo-ndk
+, openssl
+, sqlite
+, corepack
+, fblog
+, samply
+, ...
 }:
 
 let
@@ -35,16 +32,18 @@ let
   fenixPkgs = fenix.packages.${system};
   mkShell =
     top:
-    (combineShell (with shells; [
-      mkLinters
-      mkCargo
-      mkRustWasm
-      mkGrpc
-    ]) top);
+    (combineShell
+      (with shells; [
+        mkLinters
+        mkCargo
+        mkRustWasm
+        mkGrpc
+      ])
+      top);
 
   rust-toolchain = fenixPkgs.fromToolchainFile {
     file = ./../rust-toolchain.toml;
-    sha256 = "sha256-yMuSb5eQPO/bHv+Bcf/US8LVMbf/G/0MSfiPwBhiPpk=";
+    sha256 = "sha256-s1RPtyvDGJaX/BisLT+ifVfuhDT1nZkZ1NcK8sbwELM=";
   };
 
   androidComposition = androidenv.composeAndroidPackages {
@@ -75,16 +74,14 @@ mkShell {
       gource
       gnuplot
       flamegraph
+      cargo-flamegraph
       inferno
       cargo-ndk
+      samply
       openssl
       sqlite
-      sccache
 
-      lnav
       fblog
-      grpcui
-      bruno
 
       # make sure to use nodePackages! or it will install yarn irrespective of environmental node.
       corepack
@@ -96,7 +93,4 @@ mkShell {
       frameworks.AppKit
       darwin.cctools
     ];
-
-  RUSTC_WRAPPER = "${sccache}/bin/sccache";
-  SCCACHE_CACHE_SIZE = "50G";
 }

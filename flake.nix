@@ -25,13 +25,12 @@
   };
 
   outputs =
-    {
-      nixpkgs,
-      flake-utils,
-      fenix,
-      foundry,
-      solc,
-      ...
+    { nixpkgs
+    , flake-utils
+    , fenix
+    , foundry
+    , solc
+    , ...
     }:
     flake-utils.lib.eachDefaultSystem (
       system:
