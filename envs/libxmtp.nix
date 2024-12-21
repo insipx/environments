@@ -1,9 +1,9 @@
-{ stdenv
+{ shells
+, stdenv
 , darwin
 , lib
 , system
 , fenix
-, shells
 , androidenv
 , pkg-config
 , mktemp
