@@ -9,6 +9,7 @@
 , cargo-audit
 , cargo-nextest
 , cargo-udeps
+, cargo-generate
 , extraInputs ? { }
 , mkShell
 , ...
@@ -25,5 +26,6 @@
       cargo-audit
       cargo-nextest
       cargo-udeps
+      cargo-generate
     ];
   } // extraInputs)
