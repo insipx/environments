@@ -9,7 +9,7 @@
 , avrdude
 , fetchCrate
 , makeRustPlatform
-, ...
+, pkgsCross
 }:
 
 let
@@ -26,11 +26,11 @@ let
       ])
       top);
 
-  rust-toolchain = fenixPkgs.combine (with fenixPkgs; [
-    minimal.rustc
-    minimal.cargo
-    targets.wasm32-unknown-unknown.latest.rust-std
-  ]);
+  rust-toolchain = fenixPkgs.complete.withComponents [
+    "rustc"
+    "cargo"
+    "rust-src"
+  ];
 
   rustPlatform = makeRustPlatform {
     cargo = rust-toolchain;
@@ -58,6 +58,7 @@ mkShell {
       fblog
       ravedude
       avrdude
+      pkgsCross.avr.buildPackages.gcc
     ]
     ++ lib.optionals isDarwin [
       frameworks.CoreServices

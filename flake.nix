@@ -51,14 +51,8 @@
           rust-stable = rustShell ./envs/rust-stable.nix;
           libxmtp = rustShell ./envs/libxmtp.nix;
           fennel = rustShell ./envs/fennel.nix;
-          # arduino = rustShell ./envs/arduino.nix;
-          arduino = (callPackage pkgsRust) ./envs/arduino.nix { inherit fenix system ravedude; };
+          arduino = rustShell ./envs/arduino.nix;
 
-          #rust-nightly = (callPackage pkgsRust) ./envs/rust-nightly.nix { inherit fenix system; };
-          #rust-stable = (callPackage pkgsRust) ./envs/rust-stable.nix { inherit fenix system; };
-          #libxmtp = (callPackage pkgsRust) ./envs/libxmtp.nix { inherit fenix system; };
-          #arduino = (callPackage pkgsRust) ./envs/arduino.nix { inherit fenix system; };
-          #fennel = (callPackage pkgsRust) ./envs/fennel.nix { inherit fenix system; };
           xmtp-js = (callPackage pkgs) ./envs/xmtp-js.nix { };
           xmtp-node-go = (callPackage pkgs) ./envs/xmtp-node-go.nix { };
           xmtp-android = import ./envs/xmtp-android.nix { inherit pkgsAndroid system; };
