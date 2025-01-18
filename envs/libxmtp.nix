@@ -21,6 +21,7 @@
 , sqlite
 , corepack
 , fblog
+, lnav
 , samply
 , ...
 }:
@@ -82,6 +83,7 @@ mkShell {
       sqlite
 
       fblog
+      lnav
 
       # make sure to use nodePackages! or it will install yarn irrespective of environmental node.
       corepack
