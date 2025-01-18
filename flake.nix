@@ -10,7 +10,6 @@
         nixpkgs.follows = "nixpkgs";
       };
     };
-
     solc = {
       url = "github:hellwolf/solc.nix";
       inputs = {
@@ -43,13 +42,17 @@
             system
             ;
         };
+        rustShell = dir: (pkgBundles.callPackage pkgBundles.pkgsRust) dir { inherit fenix system; };
       in
       with pkgBundles;
       {
         devShells = {
-          rust-nightly = (callPackage pkgsRust) ./envs/rust-nightly.nix { inherit fenix system; };
-          rust-stable = (callPackage pkgsRust) ./envs/rust-stable.nix { inherit fenix system; };
-          libxmtp = (callPackage pkgsRust) ./envs/libxmtp.nix { inherit fenix system; };
+          rust-nightly = rustShell ./envs/rust-nightly.nix;
+          rust-stable = rustShell ./envs/rust-stable.nix;
+          libxmtp = rustShell ./envs/libxmtp.nix;
+          fennel = rustShell ./envs/fennel.nix;
+          arduino = rustShell ./envs/arduino.nix;
+
           xmtp-js = (callPackage pkgs) ./envs/xmtp-js.nix { };
           xmtp-node-go = (callPackage pkgs) ./envs/xmtp-node-go.nix { };
           xmtp-android = import ./envs/xmtp-android.nix { inherit pkgsAndroid system; };
