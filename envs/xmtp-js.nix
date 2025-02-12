@@ -1,14 +1,16 @@
-{
-  shells,
-  stdenv,
-  darwin,
-  mktemp,
-  buf,
-  curl,
-  geckodriver,
-  corepack,
-  pkg-config,
-  lib,
+{ shells
+, stdenv
+, darwin
+, mktemp
+, buf
+, curl
+, geckodriver
+, corepack
+, pkg-config
+, playwright
+, playwright-driver
+, lib
+,
 }:
 
 let
@@ -16,11 +18,15 @@ let
   # linters = import ./../linters.nix { inherit pkgs; };
   mkShell =
     top:
-    (shells.combineShell (with shells; [
-      mkLinters
-    ]) top);
+    (shells.combineShell
+      (with shells; [
+        mkLinters
+      ])
+      top);
 in
 mkShell {
+  PLAYWRIGHT_BROWSERS_PATH = "${playwright-driver.browsers}";
+  PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS = "true";
   name = "xmtp-js environment";
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
@@ -29,7 +35,8 @@ mkShell {
       buf
       curl
       geckodriver
-
+        # playwright
+      playwright-driver.browsers
       corepack
     ]
     ++ lib.optionals stdenv.isDarwin [

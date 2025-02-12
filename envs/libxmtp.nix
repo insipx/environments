@@ -20,6 +20,7 @@
 , lnav
 , zstd
 , llvmPackages_20
+, wasm-bindgen-cli
 , ...
 }:
 
@@ -70,11 +71,14 @@ mkShell {
   CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_RUSTFLAGS = "-C target-feature=-zero-call-used-regs";
   # disable -fzerocallusedregs in clang
   hardeningDisable = [ "zerocallusedregs" ];
+  OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
+  OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
     [
       rust-toolchain
+      wasm-bindgen-cli
       fenixPkgs.rust-analyzer
       zstd
       # llvmPackages_20.stdenv
@@ -84,6 +88,7 @@ mkShell {
       kotlin
       diesel-cli
 
+      # Random devtools
       # tokio-console
       gource
       gnuplot
