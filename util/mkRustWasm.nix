@@ -6,6 +6,7 @@
 , chromedriver
 , google-chrome
 , geckodriver
+, wasm-bindgen-cli
 , mkShell
 , extraInputs ? { }
 , ...
@@ -15,6 +16,7 @@
       twiggy
       binaryen
       wasm-pack
+      wasm-bindgen-cli
       wabt
       chromedriver
       google-chrome

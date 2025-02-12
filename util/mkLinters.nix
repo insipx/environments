@@ -15,12 +15,14 @@
 , golangci-lint
 , ktlint
 , mkShell
+, taplo
 , extraInputs ? { }
 }:
 (mkShell
   {
     name = "Common Linters + Formatters";
     buildInputs = [
+      taplo
       dprint
       stylua
       deno

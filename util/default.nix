@@ -13,6 +13,12 @@ callPackage: pkgs: {
     mkRustWasm = extraInputs: (callPackage pkgs ./mkRustWasm.nix { inherit extraInputs; });
     mkGrpc = extraInputs: (callPackage pkgs ./mkGrpc.nix { inherit extraInputs; });
 
-    combineShell = otherShells: extraInputs: (callPackage pkgs ./combineShell.nix { inherit otherShells extraInputs; });
+    combineShell =
+      { otherShells
+      , extraInputs
+      , stdenv ? pkgs.stdenv
+      }: (callPackage pkgs ./combineShell.nix {
+        inherit otherShells extraInputs stdenv;
+      });
   };
 }

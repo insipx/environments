@@ -1,6 +1,5 @@
 # make a shell with standard common cargo tools
 { cargo-cache
-, cargo-expand
 , cargo-machete
 , cargo-features-manager
 , cargo-bloat
@@ -17,7 +16,6 @@
   {
     buildInputs = [
       cargo-cache
-      cargo-expand
       cargo-machete
       cargo-features-manager
       cargo-bloat

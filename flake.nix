@@ -4,6 +4,7 @@
     #     url = "github:cargo2nix/cargo2nix/release-0.11.0";
     #     inputs = { nixpkgs.follows = "nixpkgs"; };
     #   };
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     fenix = {
       url = "github:nix-community/fenix";
       inputs = {
@@ -53,6 +54,7 @@
           fennel = rustShell ./envs/fennel.nix;
           arduino = rustShell ./envs/arduino.nix;
 
+          foundry = (callPackage pkgs) ./envs/foundry.nix { };
           xmtp-js = (callPackage pkgs) ./envs/xmtp-js.nix { };
           xmtp-node-go = (callPackage pkgs) ./envs/xmtp-node-go.nix { };
           xmtp-android = import ./envs/xmtp-android.nix { inherit pkgsAndroid system; };

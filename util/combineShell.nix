@@ -2,6 +2,7 @@
 , mkShell
 , hello
 , extraInputs
+, stdenv
 }:
 let
   # Evaluate the fn if its a function, otherwise leave it alone
@@ -12,6 +13,6 @@ let
       x;
   evaluatedShells = builtins.map (x: (fnOrSet x)) otherShells;
 in
-mkShell ({
+mkShell.override { inherit stdenv; } ({
   inputsFrom = [ hello ] ++ evaluatedShells;
 } // extraInputs)
