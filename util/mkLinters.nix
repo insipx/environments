@@ -14,6 +14,7 @@
 , shellcheck
 , golangci-lint
 , ktlint
+, taplo
 , mkShell
 , taplo
 , extraInputs ? { }
