@@ -42,7 +42,7 @@ let
               mkGrpc
             ];
           extraInputs = top;
-          stdenv = llvmPackages_20.stdenv;
+          # stdenv = llvmPackages_20.stdenv;
         });
 
   rust-toolchain = fenixPkgs.fromToolchainFile {
@@ -68,7 +68,6 @@ mkShell {
   # AS_wasm32_unknown_unknown = "${llvmPackages_20.clang-unwrapped}/bin/llvm-as";
   # AR_wasm32_unknown_unknown = "${llvmPackages_20.clang-unwrapped}/bin/llvm-ar";
   # STRIP_wasm32_unknown_unknown = "${llvmPackages_20.clang-unwrapped}/bin/llvm-strip";
-  # CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_RUSTFLAGS = "-C target-feature=-zero-call-used-regs";
   # disable -fzerocallusedregs in clang
   hardeningDisable = [ "zerocallusedregs" ];
   OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
