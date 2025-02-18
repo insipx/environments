@@ -1,24 +1,27 @@
-{
-  go,
-  gopls,
-  stdenv,
-  darwin,
-  shells,
-  mockgen,
-  moreutils,
-  protoc-gen-go,
-  pkg-config,
-  lib,
-  ...
+{ go
+, gopls
+, stdenv
+, darwin
+, shells
+, mockgen
+, moreutils
+, protoc-gen-go
+, pkg-config
+, lib
+, ...
 }:
 
 let
   mkShell =
     top:
-    (shells.combineShell (with shells; [
-      mkLinters
-      mkGrpc
-    ]) top);
+    (shells.combineShell {
+      otherShells = with shells;
+        [
+          mkLinters
+          mkGrpc
+        ];
+      extraInputs = top;
+    });
   inherit (darwin.apple_sdk) frameworks;
 in
 mkShell {
