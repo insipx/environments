@@ -19,7 +19,7 @@
 , corepack
 , lnav
 , zstd
-, llvmPackages_20
+, llvmPackages_19
 , wasm-bindgen-cli
 , ...
 }:
@@ -42,7 +42,7 @@ let
               mkGrpc
             ];
           extraInputs = top;
-          stdenv = llvmPackages_20.stdenv;
+          inherit (llvmPackages_19) stdenv;
         });
 
   rust-toolchain = fenixPkgs.fromToolchainFile {
@@ -62,12 +62,12 @@ in
 mkShell {
   # inherit ANDROID_HOME ANDROID_NDK_ROOT;
   OPENSSL_DIR = "${openssl.dev}";
-  LLVM_PATH = "${llvmPackages_20.stdenv}";
-  # CC_wasm32_unknown_unknown = "${llvmPackages_20.clang-unwrapped}/bin/clang";
-  # CXX_wasm32_unknown_unknown = "${llvmPackages_20.clang-unwrapped}/bin/clang++";
-  # AS_wasm32_unknown_unknown = "${llvmPackages_20.clang-unwrapped}/bin/llvm-as";
-  # AR_wasm32_unknown_unknown = "${llvmPackages_20.clang-unwrapped}/bin/llvm-ar";
-  # STRIP_wasm32_unknown_unknown = "${llvmPackages_20.clang-unwrapped}/bin/llvm-strip";
+  LLVM_PATH = "${llvmPackages_19.stdenv}";
+  # CC_wasm32_unknown_unknown = "${llvmPackages_19.clang-unwrapped}/bin/clang";
+  # CXX_wasm32_unknown_unknown = "${llvmPackages_19.clang-unwrapped}/bin/clang++";
+  # AS_wasm32_unknown_unknown = "${llvmPackages_19.clang-unwrapped}/bin/llvm-as";
+  # AR_wasm32_unknown_unknown = "${llvmPackages_19.clang-unwrapped}/bin/llvm-ar";
+  # STRIP_wasm32_unknown_unknown = "${llvmPackages_19.clang-unwrapped}/bin/llvm-strip";
   # CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_RUSTFLAGS = "-C target-feature=-zero-call-used-regs";
   # disable -fzerocallusedregs in clang
   hardeningDisable = [ "zerocallusedregs" ];
@@ -81,7 +81,7 @@ mkShell {
       wasm-bindgen-cli
       fenixPkgs.rust-analyzer
       zstd
-      # llvmPackages_20.stdenv
+      # llvmPackages_19.stdenv
 
       mktemp
       jdk21
