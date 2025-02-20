@@ -74,6 +74,21 @@
         "type": "github"
       }
     },
+    "mkshell-util": {
+      "locked": {
+        "lastModified": 1740069870,
+        "narHash": "sha256-hO4lmUPE80gi22FJfJcqBX3B+Sy+cUikLgOUpvWKh80=",
+        "owner": "insipx",
+        "repo": "mkShell-util.nix",
+        "rev": "740bd88b2e664854c9cdcde37cd98874349364c8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "insipx",
+        "repo": "mkShell-util.nix",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1666753130,
@@ -109,6 +124,7 @@
         "fenix": "fenix",
         "flake-utils": "flake-utils",
         "foundry": "foundry",
+        "mkshell-util": "mkshell-util",
         "nixpkgs": "nixpkgs_2",
         "solc": "solc"
       }

@@ -22,10 +22,11 @@
     flake-utils = {
       url = "github:numtide/flake-utils";
     };
+    mkshell-util = { url = "github:insipx/mkShell-util.nix"; };
   };
 
   outputs =
-    { nixpkgs
+    inputs@{ nixpkgs
     , flake-utils
     , fenix
     , foundry
@@ -35,12 +36,14 @@
     flake-utils.lib.eachDefaultSystem (
       system:
       let
+        mkshell-util = import inputs.mkshell-util;
         pkgBundles = import ./pkg-bundles {
           inherit
             nixpkgs
             fenix
             foundry
             system
+            mkshell-util
             ;
         };
         rustShell = dir: (pkgBundles.callPackage pkgBundles.pkgsRust) dir { inherit fenix system; };
