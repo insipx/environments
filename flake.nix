@@ -60,7 +60,8 @@
           foundry = (callPackage pkgs) ./envs/foundry.nix { };
           xmtp-js = (callPackage pkgs) ./envs/xmtp-js.nix { };
           xmtp-node-go = (callPackage pkgs) ./envs/xmtp-node-go.nix { };
-          xmtp-android = import ./envs/xmtp-android.nix { inherit pkgsAndroid system; };
+          xmtp-android = (callPackage pkgsAndroid) ./envs/xmtp-android.nix { };
+          # xmtp-android = import ./envs/xmtp-android.nix { inherit pkgsAndroid system; };
 
           solidityDev = import ./envs/solidityDev.nix {
             inherit

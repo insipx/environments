@@ -1,14 +1,13 @@
-{
-  shells,
-  androidenv,
-  stdenv,
-  darwin,
-  jdk17,
-  mktemp,
-  kotlin,
-  gradle,
-  lib,
-  ...
+{ shells
+, androidenv
+, stdenv
+, darwin
+, jdk17
+, mktemp
+, kotlin
+, gradle
+, lib
+, ...
 }:
 
 let
@@ -71,10 +70,14 @@ let
   #};
   mkShell =
     this:
-    shells.combineShell (with shells; [
-      mkGrpc
-      mkLinters
-    ]) this;
+    shells.combineShell {
+      otherShells = with shells;
+        [
+          mkLinters
+          mkGrpc
+        ];
+      extraInputs = this;
+    };
 in
 mkShell {
   # inherit shellHook;
