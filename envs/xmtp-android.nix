@@ -20,7 +20,6 @@ let
       "31"
       "33"
       "34"
-      "35"
     ];
     systemImageTypes = [
       "google_apis"

@@ -7,8 +7,8 @@
 , geckodriver
 , corepack
 , pkg-config
-, playwright
 , playwright-driver
+, playwright
 , lib
 ,
 }:
@@ -19,10 +19,13 @@ let
   mkShell =
     top:
     (shells.combineShell
-      (with shells; [
-        mkLinters
-      ])
-      top);
+      {
+        otherShells = with shells;
+          [
+            mkLinters
+          ];
+        extraInputs = top;
+      });
 in
 mkShell {
   PLAYWRIGHT_BROWSERS_PATH = "${playwright-driver.browsers}";
@@ -35,7 +38,7 @@ mkShell {
       buf
       curl
       geckodriver
-        # playwright
+      playwright
       playwright-driver.browsers
       corepack
     ]

@@ -54,6 +54,7 @@
           rust-nightly = rustShell ./envs/rust-nightly.nix;
           rust-stable = rustShell ./envs/rust-stable.nix;
           libxmtp = rustShell ./envs/libxmtp.nix;
+          sqlite-wasm-rs = rustshell ./envs/sqlite-wasm-rs.nix;
           fennel = rustShell ./envs/fennel.nix;
           arduino = rustShell ./envs/arduino.nix;
 
