@@ -1,14 +1,13 @@
-{
-  shells,
-  androidenv,
-  stdenv,
-  darwin,
-  jdk17,
-  mktemp,
-  kotlin,
-  gradle,
-  lib,
-  ...
+{ shells
+, androidenv
+, stdenv
+, darwin
+, jdk17
+, mktemp
+, kotlin
+, gradle
+, lib
+, ...
 }:
 
 let
@@ -21,7 +20,6 @@ let
       "31"
       "33"
       "34"
-      "35"
     ];
     systemImageTypes = [
       "google_apis"
@@ -71,10 +69,14 @@ let
   #};
   mkShell =
     this:
-    shells.combineShell (with shells; [
-      mkGrpc
-      mkLinters
-    ]) this;
+    shells.combineShell {
+      otherShells = with shells;
+        [
+          mkLinters
+          mkGrpc
+        ];
+      extraInputs = this;
+    };
 in
 mkShell {
   # inherit shellHook;

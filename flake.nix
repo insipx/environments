@@ -22,10 +22,11 @@
     flake-utils = {
       url = "github:numtide/flake-utils";
     };
+    mkshell-util = { url = "github:insipx/mkShell-util.nix"; };
   };
 
   outputs =
-    { nixpkgs
+    inputs@{ nixpkgs
     , flake-utils
     , fenix
     , foundry
@@ -35,12 +36,14 @@
     flake-utils.lib.eachDefaultSystem (
       system:
       let
+        mkshell-util = import inputs.mkshell-util;
         pkgBundles = import ./pkg-bundles {
           inherit
             nixpkgs
             fenix
             foundry
             system
+            mkshell-util
             ;
         };
         rustShell = dir: (pkgBundles.callPackage pkgBundles.pkgsRust) dir { inherit fenix system; };
@@ -51,13 +54,15 @@
           rust-nightly = rustShell ./envs/rust-nightly.nix;
           rust-stable = rustShell ./envs/rust-stable.nix;
           libxmtp = rustShell ./envs/libxmtp.nix;
+          sqlite-wasm-rs = rustshell ./envs/sqlite-wasm-rs.nix;
           fennel = rustShell ./envs/fennel.nix;
           arduino = rustShell ./envs/arduino.nix;
 
           foundry = (callPackage pkgs) ./envs/foundry.nix { };
           xmtp-js = (callPackage pkgs) ./envs/xmtp-js.nix { };
           xmtp-node-go = (callPackage pkgs) ./envs/xmtp-node-go.nix { };
-          xmtp-android = import ./envs/xmtp-android.nix { inherit pkgsAndroid system; };
+          xmtp-android = (callPackage pkgsAndroid) ./envs/xmtp-android.nix { };
+          # xmtp-android = import ./envs/xmtp-android.nix { inherit pkgsAndroid system; };
 
           solidityDev = import ./envs/solidityDev.nix {
             inherit

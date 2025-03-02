@@ -5,23 +5,12 @@
 , system
 , fenix
 , pkg-config
-, mktemp
-, jdk21
-, kotlin
-, diesel-cli
-, gource
-, gnuplot
-, flamegraph
-, cargo-flamegraph
-, inferno
 , openssl
 , sqlite
 , corepack
-, lnav
-, zstd
+, emscripten
   # , llvmPackages_19
 , wasm-bindgen-cli
-, jq
 , ...
 }:
 
@@ -38,9 +27,7 @@ let
           otherShells = with shells;
             [
               mkLinters
-              mkCargo
               mkRustWasm
-              mkGrpc
             ];
           extraInputs = top;
           # inherit (llvmPackages_19) stdenv;
@@ -72,27 +59,11 @@ mkShell {
       rust-toolchain
       wasm-bindgen-cli
       fenixPkgs.rust-analyzer
-      zstd
       # llvmPackages_19.stdenv
 
-      mktemp
-      jdk21
-      kotlin
-      diesel-cli
-      jq
-
-      # Random devtools
-      # tokio-console
-      gource
-      gnuplot
-      flamegraph
-      cargo-flamegraph
-      inferno
-      # cargo-ndk
+      emscripten
       openssl
       sqlite
-
-      lnav
 
       # make sure to use nodePackages! or it will install yarn irrespective of environmental node.
       corepack

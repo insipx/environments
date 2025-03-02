@@ -1,4 +1,4 @@
-{ nixpkgs, fenix, foundry, system, ... }:
+{ nixpkgs, fenix, foundry, system, mkshell-util, ... }:
 let
   # custom_overlays = import ./overlays;
 
@@ -9,7 +9,7 @@ let
     } // extraConfig);
   # https://nix.dev/tutorials/callpackage
   callPackage = pkgs: pkgs.lib.callPackageWith ((mkShellWrappers pkgs) // pkgs);
-  mkShellWrappers = pkgs: (import ./../util) callPackage pkgs;
+  mkShellWrappers = pkgs: mkshell-util callPackage pkgs;
 in
 {
   inherit callPackage;
