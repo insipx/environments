@@ -21,6 +21,7 @@
 , zstd
 , llvmPackages_19
 , wasm-bindgen-cli
+, jq
 , ...
 }:
 
@@ -47,7 +48,7 @@ let
 
   rust-toolchain = fenixPkgs.fromToolchainFile {
     file = ./../rust-toolchain.toml;
-    sha256 = "sha256-vMlz0zHduoXtrlu0Kj1jEp71tYFXyymACW8L4jzrzNA=";
+    sha256 = "sha256-AJ6LX/Q/Er9kS15bn9iflkUwcgYqRQxiOIL2ToVAXaU=";
   };
 
   # androidComposition = androidenv.composeAndroidPackages {
@@ -87,6 +88,7 @@ mkShell {
       jdk21
       kotlin
       diesel-cli
+      jq
 
       # Random devtools
       # tokio-console

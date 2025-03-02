@@ -1,6 +1,5 @@
 # A bunch of linting and formatting I use w/o an LSP
-{ dprint
-, stylua
+{ stylua
 , deno
 , nixfmt
 , yamlfmt
@@ -23,7 +22,6 @@
     name = "Common Linters + Formatters";
     buildInputs = [
       taplo
-      dprint
       stylua
       deno
       nixfmt
