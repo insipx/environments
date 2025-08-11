@@ -1,4 +1,4 @@
-[toolchain]
+etoolchain]
 channel = "nightly"
 components = [ "rustc", "cargo", "clippy", "rustfmt", "rust-analyzer" ]
 targets = [ "wasm32-unknown-unknown", "x86_64-unknown-linux-gnu", "x86_64-linux-android", "aarch64-linux-android"]

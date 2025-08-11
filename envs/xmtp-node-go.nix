@@ -8,6 +8,7 @@
 , protoc-gen-go
 , pkg-config
 , lib
+, go-mockery
 , ...
 }:
 
@@ -33,6 +34,7 @@ mkShell {
       moreutils
       protoc-gen-go
       gopls
+      go-mockery
     ]
     ++ lib.optionals stdenv.isDarwin [
       frameworks.CoreServices

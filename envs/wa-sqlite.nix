@@ -1,4 +1,4 @@
-{ pkgs, system, ... }:
+{ pkgs, ... }:
 
 let
   isDarwin = pkgs.stdenv.isDarwin;
@@ -6,15 +6,6 @@ let
   linters = import ./../linters.nix { inherit pkgs; };
 
 in
-#rust-toolchain = with fenixPkgs;
-#  combine [
-#    minimal.rustc
-#    minimal.cargo
-#    complete.clippy
-#    complete.rustfmt
-#    complete.llvm-tools-preview
-#    targets.wasm32-unknown-unknown.latest.rust-std
-#  ];
 pkgs.mkShell {
   nativeBuildInputs = with pkgs; [ pkg-config ];
   buildInputs =

@@ -43,8 +43,7 @@
             fenix
             foundry
             system
-            mkshell-util
-            ;
+            mkshell-util;
         };
         rustShell = dir: (pkgBundles.callPackage pkgBundles.pkgsRust) dir { inherit fenix system; };
       in
@@ -53,16 +52,14 @@
         devShells = {
           rust-nightly = rustShell ./envs/rust-nightly.nix;
           rust-stable = rustShell ./envs/rust-stable.nix;
-          libxmtp = rustShell ./envs/libxmtp.nix;
-          sqlite-wasm-rs = rustshell ./envs/sqlite-wasm-rs.nix;
-          fennel = rustShell ./envs/fennel.nix;
           arduino = rustShell ./envs/arduino.nix;
 
           foundry = (callPackage pkgs) ./envs/foundry.nix { };
           xmtp-js = (callPackage pkgs) ./envs/xmtp-js.nix { };
           xmtp-node-go = (callPackage pkgs) ./envs/xmtp-node-go.nix { };
+          xmtpd = (callPackage pkgs) ./envs/xmtpd.nix { };
+
           xmtp-android = (callPackage pkgsAndroid) ./envs/xmtp-android.nix { };
-          # xmtp-android = import ./envs/xmtp-android.nix { inherit pkgsAndroid system; };
 
           solidityDev = import ./envs/solidityDev.nix {
             inherit
@@ -72,20 +69,11 @@
               system
               ;
           };
-
-          luaDev = import ./envs/lua_dev.nix { inherit pkgs; };
-
+          luaDev = import ./envs/lua-dev.nix { inherit pkgs; };
           xchat = import ./envs/xchat.nix { inherit withRust system fenix; };
-
           jsonrpsee = import ./envs/jsonrpsee.nix { inherit withRust system fenix; };
-
           walletconnect-sign = import ./envs/walletconnect-sign.nix { inherit pkgs system; };
-
-          xmtpd = import ./envs/xmtpd.nix { inherit pkgs system; };
-
           xmtp-proto = import ./envs/xmtp-proto.nix { inherit pkgs system; };
-          wa-sqlite = import ./envs/wa-sqlite.nix { inherit pkgs system; };
-          diesel-async = import ./envs/diesel-async.nix { inherit withRust system fenix; };
         };
       }
     );

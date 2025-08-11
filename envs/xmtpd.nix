@@ -1,28 +1,42 @@
-{ pkgs, system, ... }:
+{ go
+, gopls
+, stdenv
+, darwin
+, shells
+, mockgen
+, moreutils
+, protoc-gen-go
+, pkg-config
+, lib
+, foundry
+, ...
+}:
 
 let
-  isDarwin = pkgs.stdenv.isDarwin;
-  frameworks = pkgs.darwin.apple_sdk.frameworks;
-  linters = import ./../linters.nix { inherit pkgs; };
+  mkShell =
+    top:
+    (shells.combineShell {
+      otherShells = with shells;
+        [
+          mkLinters
+          mkGrpc
+        ];
+      extraInputs = top;
+    });
+  inherit (darwin.apple_sdk) frameworks;
 in
-pkgs.mkShell {
-  nativeBuildInputs = with pkgs; [ pkg-config ];
+mkShell {
+  nativeBuildInputs = [ pkg-config ];
   buildInputs =
-    with pkgs;
     [
-      # llvmPackages_16.libcxxClang
-      mktemp
-      buf
-      curl
-      linters
-      protobuf
-      protoc-gen-prost-crate
-      protolint
       go
-      gopls
       mockgen
+      moreutils
+      protoc-gen-go
+      gopls
+      foundry
     ]
-    ++ lib.optionals isDarwin [
+    ++ lib.optionals stdenv.isDarwin [
       frameworks.CoreServices
       frameworks.Carbon
       frameworks.ApplicationServices
@@ -30,3 +44,5 @@ pkgs.mkShell {
       darwin.cctools
     ];
 }
+
+

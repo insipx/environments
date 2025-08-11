@@ -1,12 +1,12 @@
-{
-  shells,
-  stdenv,
-  darwin,
-  fenix,
-  system,
-  pkg-config,
-  tokio-console,
-  curl,
+{ shells
+, stdenv
+, darwin
+, fenix
+, system
+, pkg-config
+, tokio-console
+, curl
+,
 }:
 let
   inherit (stdenv) isDarwin;
@@ -39,8 +39,6 @@ shells.mkCargo {
       tokio-console
 
       sqlite
-      mysql80
-      # mariadb_106
     ]
     ++ lib.optionals isDarwin [
       frameworks.CoreServices
