@@ -1,16 +1,16 @@
-{ shells
-, stdenv
+{ stdenv
 , darwin
 , fenix
 , system
 , pkg-config
-, tokio-console
+, mkShell
+, sqlite
+, mktemp
 , curl
-,
+, lib
 }:
 let
   inherit (stdenv) isDarwin;
-  inherit (darwin.apple_sdk) frameworks;
   fenixPkgs = fenix.packages.${system};
 
   rust-toolchain =
@@ -25,7 +25,7 @@ let
       targets.wasm32-wasi.latest.rust-std
     ];
 in
-shells.mkCargo {
+mkShell {
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
     with fenixPkgs;
@@ -36,15 +36,8 @@ shells.mkCargo {
       sqlite
       mktemp
       curl
-      tokio-console
-
-      sqlite
     ]
     ++ lib.optionals isDarwin [
-      frameworks.CoreServices
-      frameworks.Carbon
-      frameworks.ApplicationServices
-      frameworks.AppKit
       darwin.cctools
     ];
 }
