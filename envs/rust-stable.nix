@@ -1,11 +1,11 @@
-{
-  mkCargo,
-  fenix,
-  system,
-  curl,
-  stdenv,
-  darwin,
-  pkg-config,
+{ shells
+, fenix
+, system
+, curl
+, stdenv
+, darwin
+, pkg-config
+,
 }:
 
 let
@@ -24,7 +24,7 @@ let
       targets.wasm32-unknown-unknown.latest.rust-std
     ];
 in
-mkCargo {
+shells.mkCargo {
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
     with fenixPkgs;

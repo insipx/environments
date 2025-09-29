@@ -19,12 +19,13 @@ let
   fenixPkgs = fenix.packages.${system};
   mkShell =
     top:
-    (combineShell
-      (with shells; [
+    combineShell {
+      otherShells = with shells; [
         mkLinters
         mkCargo
-      ])
-      top);
+      ];
+      extraInputs = top;
+    };
 
   rust-toolchain = fenixPkgs.complete.withComponents [
     "rustc"

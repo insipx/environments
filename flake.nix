@@ -46,6 +46,8 @@
             mkshell-util;
         };
         rustShell = dir: (pkgBundles.callPackage pkgBundles.pkgsRust) dir { inherit fenix system; };
+        rustWithSolc = dir: (pkgBundles.callPackage pkgBundles.pkgsRust) dir { inherit fenix system solc; };
+
       in
       with pkgBundles;
       {
@@ -53,6 +55,8 @@
           rust-nightly = rustShell ./envs/rust-nightly.nix;
           rust-stable = rustShell ./envs/rust-stable.nix;
           arduino = rustShell ./envs/arduino.nix;
+          solidityDev = rustWithSolc ./envs/solidityDev.nix;
+          infrastructure = (callPackage pkgsUnfree) ./envs/infrastructure.nix { };
 
           foundry = (callPackage pkgs) ./envs/foundry.nix { };
           xmtp-js = (callPackage pkgs) ./envs/xmtp-js.nix { };
@@ -61,14 +65,6 @@
 
           xmtp-android = (callPackage pkgsAndroid) ./envs/xmtp-android.nix { };
 
-          solidityDev = import ./envs/solidityDev.nix {
-            inherit
-              withRust
-              fenix
-              solc
-              system
-              ;
-          };
           luaDev = import ./envs/lua-dev.nix { inherit pkgs; };
           xchat = import ./envs/xchat.nix { inherit withRust system fenix; };
           jsonrpsee = import ./envs/jsonrpsee.nix { inherit withRust system fenix; };
