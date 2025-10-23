@@ -57,6 +57,8 @@
           arduino = rustShell ./envs/arduino.nix;
           solidityDev = rustWithSolc ./envs/solidityDev.nix;
           infrastructure = (callPackage pkgsUnfree) ./envs/infrastructure.nix { };
+          xmtp-ios = pkgs.callPackage ./envs/xmtp-ios.nix { };
+
 
           foundry = (callPackage pkgs) ./envs/foundry.nix { };
           xmtp-js = (callPackage pkgs) ./envs/xmtp-js.nix { };
