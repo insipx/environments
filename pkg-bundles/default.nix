@@ -1,7 +1,5 @@
 { nixpkgs, fenix, foundry, system, mkshell-util, ... }:
 let
-  # custom_overlays = import ./overlays;
-
   mkPkgs = extraConfig: import nixpkgs
     ({
       inherit system;

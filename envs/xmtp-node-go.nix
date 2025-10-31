@@ -2,29 +2,16 @@
 , gopls
 , stdenv
 , darwin
-, shells
 , mockgen
 , moreutils
 , protoc-gen-go
 , pkg-config
 , lib
 , go-mockery
+, mkShell
 , ...
 }:
 
-let
-  mkShell =
-    top:
-    (shells.combineShell {
-      otherShells = with shells;
-        [
-          mkLinters
-          mkGrpc
-        ];
-      extraInputs = top;
-    });
-  inherit (darwin.apple_sdk) frameworks;
-in
 mkShell {
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
@@ -37,10 +24,6 @@ mkShell {
       go-mockery
     ]
     ++ lib.optionals stdenv.isDarwin [
-      frameworks.CoreServices
-      frameworks.Carbon
-      frameworks.ApplicationServices
-      frameworks.AppKit
       darwin.cctools
     ];
 }

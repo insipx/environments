@@ -1,4 +1,4 @@
-{ withGo, inputs, devenv, fenix, system, ... }:
+{ withGo, inputs, devenv, fenix, system, go-ethereum, ... }:
 let
   pkgs = withGo;
   rust-toolchain = with fenix.packages.${system};
@@ -9,10 +9,6 @@ let
       complete.rustfmt
       targets.wasm32-unknown-unknown.latest.rust-std
     ];
-  foundryPkgs = (import ./../pkgs/foundry-rs/foundry {
-    inherit pkgs system rust-toolchain;
-  });
-  goEthereumPkg = (import ./../pkgs/go-ethereum { inherit pkgs; });
   linters = import ./../linters.nix { inherit pkgs; };
   #pinnedNpm = pkgs.nodePackages.npm.overrideAttrs (oldAttrs: {
   #  version = "7.24.2";
@@ -21,7 +17,8 @@ let
   #    sha256 = "sha256-e3oRWb2OKonYY36LxMJEek0NVBIBI0aCdo3wNuLQwWQ=";
   #  };
   #});
-in devenv.lib.mkShell {
+in
+devenv.lib.mkShell {
   inherit inputs pkgs;
   modules = [{
     packages = with foundryPkgs; [

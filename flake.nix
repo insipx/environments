@@ -57,21 +57,18 @@
           arduino = rustShell ./envs/arduino.nix;
           solidityDev = rustWithSolc ./envs/solidityDev.nix;
           infrastructure = (callPackage pkgsUnfree) ./envs/infrastructure.nix { };
-          xmtp-ios = pkgs.callPackage ./envs/xmtp-ios.nix { };
-
-
-          foundry = (callPackage pkgs) ./envs/foundry.nix { };
           xmtp-js = (callPackage pkgs) ./envs/xmtp-js.nix { };
           xmtp-node-go = (callPackage pkgs) ./envs/xmtp-node-go.nix { };
           xmtpd = (callPackage pkgs) ./envs/xmtpd.nix { };
-
-          xmtp-android = (callPackage pkgsAndroid) ./envs/xmtp-android.nix { };
 
           luaDev = import ./envs/lua-dev.nix { inherit pkgs; };
           xchat = import ./envs/xchat.nix { inherit withRust system fenix; };
           jsonrpsee = import ./envs/jsonrpsee.nix { inherit withRust system fenix; };
           walletconnect-sign = import ./envs/walletconnect-sign.nix { inherit pkgs system; };
           xmtp-proto = import ./envs/xmtp-proto.nix { inherit pkgs system; };
+        };
+        packages = {
+          jj-stack = pkgs.callPackage ./pkgs/jj-stack { };
         };
       }
     );

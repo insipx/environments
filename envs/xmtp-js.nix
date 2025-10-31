@@ -1,5 +1,4 @@
-{ shells
-, stdenv
+{ stdenv
 , darwin
 , mktemp
 , buf
@@ -10,24 +9,9 @@
 , playwright-driver
 , playwright
 , lib
+, mkShell
 ,
-}:
-
-let
-  inherit (darwin.apple_sdk) frameworks;
-  # linters = import ./../linters.nix { inherit pkgs; };
-  mkShell =
-    top:
-    (shells.combineShell
-      {
-        otherShells = with shells;
-          [
-            mkLinters
-          ];
-        extraInputs = top;
-      });
-in
-mkShell {
+}: mkShell {
   PLAYWRIGHT_BROWSERS_PATH = "${playwright-driver.browsers}";
   PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS = "true";
   name = "xmtp-js environment";
@@ -43,10 +27,6 @@ mkShell {
       corepack
     ]
     ++ lib.optionals stdenv.isDarwin [
-      frameworks.CoreServices
-      frameworks.Carbon
-      frameworks.ApplicationServices
-      frameworks.AppKit
       darwin.cctools
     ];
   VITE_PROJECT_ID = "2ca676e2e5e9322c40c68f10dca637e5";
