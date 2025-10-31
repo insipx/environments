@@ -36,7 +36,7 @@
     }:
     {
       overlays.default = final: prev: {
-        inherit (self.packages.${final.system}) jj-stack;
+        inherit (self.packages.${final.system}) jj-stack jj-gt;
       };
     } //
     flake-utils.lib.eachDefaultSystem (
@@ -75,6 +75,7 @@
         };
         packages = {
           jj-stack = pkgs.callPackage ./pkgs/jj-stack { };
+          jj-gt = pkgs.callPackage ./pkgs/jj-gt { };
         };
       }
     );
