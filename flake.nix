@@ -26,13 +26,19 @@
   };
 
   outputs =
-    inputs@{ nixpkgs
+    inputs@{ self
+    , nixpkgs
     , flake-utils
     , fenix
     , foundry
     , solc
     , ...
     }:
+    {
+      overlays.default = final: prev: {
+        inherit (self.packages.${final.system}) jj-stack;
+      };
+    } //
     flake-utils.lib.eachDefaultSystem (
       system:
       let
